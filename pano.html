@@ -46,11 +46,11 @@ body{background:var(--bg);color:var(--ink);font-family:"Outfit",system-ui,sans-s
 .gal{padding:clamp(64px,10vw,120px) clamp(12px,4vw,64px) clamp(64px,8vw,110px)}
 .gal h2{font-weight:200;font-size:clamp(1.3rem,2.6vw,1.9rem);text-align:center;margin-bottom:8px}
 .gal small{display:block;text-align:center;font-size:.62rem;letter-spacing:.36em;text-transform:uppercase;color:var(--muted);margin-bottom:40px}
-.mosaic{display:grid;gap:2px;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(2,clamp(170px,17vw,300px));
-  grid-template-areas:"a b c d d e" "f b g h h i"}
+.mosaic{display:grid;gap:2px;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(2,clamp(170px,19vw,320px));
+  grid-template-areas:"a b c d d" "e b f g h"}
 .tile:nth-child(1){grid-area:a}.tile:nth-child(2){grid-area:b}.tile:nth-child(3){grid-area:c}
 .tile:nth-child(4){grid-area:d}.tile:nth-child(5){grid-area:e}.tile:nth-child(6){grid-area:f}
-.tile:nth-child(7){grid-area:g}.tile:nth-child(8){grid-area:h}.tile:nth-child(9){grid-area:i}
+.tile:nth-child(7){grid-area:g}.tile:nth-child(8){grid-area:h}
 .tile{position:relative;overflow:hidden;background:#141816;cursor:pointer;
   opacity:0;transform:translateY(24px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
 .tile.in{opacity:1;transform:none}
@@ -61,7 +61,7 @@ body{background:var(--bg);color:var(--ink);font-family:"Outfit",system-ui,sans-s
 .mosaic:hover .tile.in:not(:hover){opacity:.45}
 .tile:hover img{transform:scale(1.07)}.tile:hover figcaption{transform:none}
 @media (max-width:640px){.mosaic{grid-template-columns:repeat(2,1fr);grid-template-rows:none;grid-auto-rows:46vw;
-    grid-template-areas:"a b" "c b" "d d" "e f" "g h" "i i"}.tile figcaption{transform:none}
+    grid-template-areas:"a b" "c b" "d d" "e f" "g h"}.tile figcaption{transform:none}
   .meta,.bar{left:16px;right:16px}}
 
 .lb{position:fixed;inset:0;z-index:20;background:rgba(6,8,7,.95);display:flex;align-items:center;justify-content:center;
@@ -153,7 +153,7 @@ requestAnimationFrame(frame);
 
 /* ===== MOSAICO ===== */
 const FOTOS=[["01","O vale"],["02","Eira do Serrado"],["03","A aldeia"],["04","Nevoeiro"],["05","Castanheiros"],
-  ["06","Entre montanhas"],["07","O caminho"],["08","Ao entardecer"],["09","As gentes"]];
+  ["06","Entre montanhas"],["07","Ao entardecer"],["08","As gentes"]];
 const mos=document.getElementById('mosaic');
 FOTOS.forEach(([n,c],i)=>{const f=document.createElement('figure');f.className='tile';f.dataset.i=i;
   f.innerHTML=`<div class="ph">${n}</div><img src="assets/${n}.jpg" alt="${c}" loading="lazy" onerror="this.remove()"><figcaption>${c}</figcaption>`;
@@ -162,7 +162,7 @@ const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.targ
   e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.15});
 document.querySelectorAll('.tile').forEach(t=>io.observe(t));
 const lb=document.getElementById('lb'),li=lb.querySelector('img'),lc=lb.querySelector('p');let cur=0;
-const show=i=>{cur=(i+9)%9;li.src=`assets/${FOTOS[cur][0]}.jpg`;lc.textContent=FOTOS[cur][1];lb.classList.add('open')};
+const show=i=>{cur=(i+FOTOS.length)%FOTOS.length;li.src=`assets/${FOTOS[cur][0]}.jpg`;lc.textContent=FOTOS[cur][1];lb.classList.add('open')};
 mos.onclick=e=>{const t=e.target.closest('.tile');if(t)show(+t.dataset.i)};
 lb.querySelector('.x').onclick=()=>lb.classList.remove('open');
 lb.querySelector('.prev').onclick=e=>{e.stopPropagation();show(cur-1)};
