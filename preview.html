@@ -8,7 +8,7 @@
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400&display=swap" rel="stylesheet">
 <style>
 /* =========================================================
    IMAGENS (pasta assets/):
@@ -18,7 +18,7 @@
 :root{--ink:#f4f1ea;--bg:#0c0f0d;--muted:rgba(244,241,234,.6);--spot:170px}
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--ink);font-family:"Inter",system-ui,sans-serif;overflow-x:hidden}
+body{background:var(--bg);color:var(--ink);font-family:"Outfit",system-ui,sans-serif;font-weight:300;overflow-x:hidden}
 @media (hover:hover){body{cursor:none}}
 
 /* ---------- HERO ---------- */
@@ -33,11 +33,11 @@ body{background:var(--bg);color:var(--ink);font-family:"Inter",system-ui,sans-se
           mask-image:radial-gradient(circle at var(--x,50%) var(--y,50%),transparent 0,transparent calc(var(--spot)*.55),#000 var(--spot))}
 .hero-text{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
   justify-content:center;text-align:center;padding:0 16px;pointer-events:none}
-.hero h1{font-family:"Cormorant Garamond",serif;font-weight:300;
-  font-size:clamp(3rem,10vw,8.5rem);letter-spacing:.02em;line-height:.95;
+.hero h1{font-family:"Outfit",sans-serif;font-weight:200;
+  font-weight:100;font-size:clamp(2.8rem,9.5vw,8rem);letter-spacing:-.02em;line-height:.95;
   text-shadow:0 4px 40px rgba(0,0,0,.35);animation:rise 1.8s .2s cubic-bezier(.2,.7,.2,1) both}
-.hero p{margin-top:22px;font-family:"Cormorant Garamond",serif;font-style:italic;font-weight:300;
-  font-size:clamp(1.1rem,2.2vw,1.6rem);opacity:.9;animation:rise 1.8s .6s cubic-bezier(.2,.7,.2,1) both}
+.hero p{margin-top:22px;font-family:"Outfit",sans-serif;font-weight:200;
+  font-size:clamp(.95rem,1.6vw,1.2rem);letter-spacing:.18em;text-transform:lowercase;opacity:.85;animation:rise 1.8s .6s cubic-bezier(.2,.7,.2,1) both}
 .corner{position:absolute;font-size:.66rem;letter-spacing:.38em;text-transform:uppercase;opacity:.7}
 .corner.bl{left:32px;bottom:28px}.corner.br{right:32px;bottom:28px;opacity:.5}
 .scroll{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);width:1px;height:48px;
@@ -49,7 +49,7 @@ body{background:var(--bg);color:var(--ink);font-family:"Inter",system-ui,sans-se
 
 /* ---------- MOSAICO ---------- */
 .intro{max-width:720px;margin:0 auto;padding:clamp(72px,12vw,140px) 16px clamp(40px,6vw,64px);text-align:center}
-.intro h2{font-family:"Cormorant Garamond",serif;font-weight:300;font-size:clamp(1.6rem,3.4vw,2.6rem);line-height:1.25}
+.intro h2{font-family:"Outfit",sans-serif;font-weight:200;font-size:clamp(1.6rem,3.4vw,2.6rem);line-height:1.25}
 .intro small{display:block;margin-top:18px;font-size:.68rem;letter-spacing:.38em;text-transform:uppercase;color:var(--muted)}
 
 .mosaic{display:grid;gap:6px;padding:0 clamp(12px,4vw,64px) clamp(72px,10vw,120px);
@@ -60,13 +60,13 @@ body{background:var(--bg);color:var(--ink);font-family:"Inter",system-ui,sans-se
 .tile img{width:100%;height:100%;object-fit:cover;display:block;
   transition:transform 1.2s cubic-bezier(.2,.7,.2,1),filter .6s ease}
 .tile .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  font-family:"Cormorant Garamond",serif;font-size:2.4rem;opacity:.25;
+  font-family:"Outfit",sans-serif;font-weight:200;font-size:2.4rem;opacity:.25;
   background:linear-gradient(135deg,#1c2420,#0f1412)}
 .tile figcaption{position:absolute;left:0;right:0;bottom:0;padding:22px 20px 18px;
   background:linear-gradient(transparent,rgba(0,0,0,.65));
-  font-family:"Cormorant Garamond",serif;font-style:italic;font-size:1.2rem;
+  font-family:"Outfit",sans-serif;font-weight:200;font-size:1.2rem;
   transform:translateY(100%);transition:transform .6s cubic-bezier(.2,.7,.2,1)}
-.tile figcaption span{display:block;font-family:"Inter",sans-serif;font-style:normal;
+.tile figcaption span{display:block;font-family:"Outfit",sans-serif;font-style:normal;font-weight:300;
   font-size:.62rem;letter-spacing:.32em;text-transform:uppercase;opacity:.7;margin-bottom:4px}
 .mosaic:hover .tile.in:not(:hover){opacity:.45}
 .tile:hover img{transform:scale(1.07)}
@@ -89,9 +89,9 @@ body{background:var(--bg);color:var(--ink);font-family:"Inter",system-ui,sans-se
 .lb.open{opacity:1;pointer-events:auto}
 .lb img{max-width:90vw;max-height:82vh;object-fit:contain;box-shadow:0 30px 80px rgba(0,0,0,.5)}
 .lb p{position:absolute;bottom:28px;left:0;right:0;text-align:center;
-  font-family:"Cormorant Garamond",serif;font-style:italic;font-size:1.3rem}
+  font-family:"Outfit",sans-serif;font-weight:200;font-size:1.3rem}
 .lb button{position:absolute;background:none;border:0;color:var(--ink);font-size:2rem;
-  opacity:.6;padding:16px;cursor:pointer;font-family:"Cormorant Garamond",serif}
+  opacity:.6;padding:16px;cursor:pointer;font-family:"Outfit",sans-serif;font-weight:100}
 .lb button:hover{opacity:1}
 .lb .x{top:12px;right:16px}.lb .prev{left:8px}.lb .next{right:8px}
 
