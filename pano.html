@@ -16,7 +16,7 @@
 body{background:var(--bg);color:var(--ink);font-family:"Outfit",system-ui,sans-serif;font-weight:300;overflow-x:hidden}
 
 /* ---------- VIAGEM PANORÂMICA (scroll) ---------- */
-.stage{position:relative;height:320vh}
+.stage{position:relative;height:100svh}
 .sticky{position:sticky;top:0;height:100svh;overflow:hidden;background:#0b0d0c}
 .pano{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform;
   opacity:0;transition:opacity 1.6s ease;user-select:none;pointer-events:none}
@@ -83,7 +83,7 @@ footer{padding:24px 16px 34px;text-align:center;font-size:.58rem;letter-spacing:
     </div>
     <div class="cap" id="cap"><small>No fundo do vale</small>a aldeia</div>
     <div class="hint" id="hint"></div>
-    <div class="bar"><i id="bar"></i></div>
+    
     <div class="meta"><span>Em breve</span><span>32°43′N · 16°58′W</span></div>
   </div>
 </section>
@@ -110,7 +110,7 @@ const KEYS = [
 /* ============================================= */
 
 const pano=document.getElementById('pano'),sticky=document.getElementById('sticky'),stage=document.getElementById('stage');
-const title=document.getElementById('title'),cap=document.getElementById('cap'),hint=document.getElementById('hint'),bar=document.getElementById('bar');
+const title=document.getElementById('title'),cap=document.getElementById('cap'),hint=document.getElementById('hint');
 let prog=0,sp=0,mx=0,my=0,smx=0,smy=0,W,H,IW,IH;
 
 function size(){W=sticky.clientWidth;H=sticky.clientHeight;
@@ -121,9 +121,7 @@ function ready(){size();pano.classList.add('ready')}
 pano.complete?ready():pano.addEventListener('load',ready);
 addEventListener('resize',size);
 
-addEventListener('scroll',()=>{const r=stage.getBoundingClientRect();
-  prog=Math.min(1,Math.max(0,-r.top/(r.height-innerHeight)))},{passive:true});
-addEventListener('pointermove',e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5});
+/* imagem fixa: sem animação ao scroll nem ao rato */
 const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
 const lerp=(a,b,t)=>a+(b-a)*t;
 
@@ -143,7 +141,7 @@ function frame(){
   title.style.opacity=Math.max(0,1-sp*2.4); title.style.transform=`translateY(${-sp*80}px)`;
   hint.style.opacity=sp<.02?.55:0;
   cap.style.opacity=sp>.8?Math.min(1,(sp-.8)*6):0;
-  bar.style.width=(sp*100)+'%';
+  
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
