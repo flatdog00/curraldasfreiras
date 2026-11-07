@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Curral das Freiras</title>
+<meta name="description" content="Curral das Freiras, Madeira. Em breve.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   EDITA AQUI ↓
+   - Vídeo: põe "curral.mp4" na pasta (loop, sem som, 10–20 s)
+   - Foto:  põe "curral.jpg" na pasta (usada como capa / fallback)
+   - Frase: muda o texto em FRASE, no fim do ficheiro
+   ========================================================= */
+:root{
+  --spot: 170px;          /* raio da "lanterna" do rato */
+  --ink: #f4f1ea;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;background:radial-gradient(ellipse at 30% 20%,#2c3a33 0%,#0f1513 55%,#070908 100%)}
+body{font-family:"Inter",system-ui,sans-serif;color:var(--ink);cursor:none}
+
+/* Fundo: vídeo ou foto */
+.media{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;
+  animation:breathe 30s ease-in-out infinite alternate}
+@keyframes breathe{from{transform:scale(1.03)}to{transform:scale(1.10)}}
+
+/* Véu escuro e dessaturado, com um "buraco" onde está o rato */
+.veil{position:fixed;inset:0;
+  background:rgba(8,10,9,.62);
+  -webkit-backdrop-filter:grayscale(1) blur(2px);
+          backdrop-filter:grayscale(1) blur(2px);
+  -webkit-mask-image:radial-gradient(circle at var(--x,50%) var(--y,50%),transparent 0,transparent calc(var(--spot)*.55),#000 var(--spot));
+          mask-image:radial-gradient(circle at var(--x,50%) var(--y,50%),transparent 0,transparent calc(var(--spot)*.55),#000 var(--spot));
+  transition:--spot .6s}
+
+/* Textos fixos */
+.brand{position:fixed;top:28px;left:32px;font-family:"Cormorant Garamond",serif;
+  font-weight:300;font-size:clamp(1.3rem,2.4vw,1.8rem);letter-spacing:.04em;z-index:3}
+.soon{position:fixed;bottom:28px;left:32px;font-size:.68rem;letter-spacing:.38em;
+  text-transform:uppercase;opacity:.7;z-index:3}
+.loc{position:fixed;bottom:28px;right:32px;font-size:.68rem;letter-spacing:.38em;
+  text-transform:uppercase;opacity:.5;z-index:3}
+
+/* Frase que segue o rato */
+.phrase{position:fixed;left:0;top:0;z-index:4;pointer-events:none;
+  font-family:"Cormorant Garamond",serif;font-style:italic;font-weight:300;
+  font-size:clamp(1.05rem,1.8vw,1.45rem);white-space:nowrap;
+  text-shadow:0 2px 18px rgba(0,0,0,.55);
+  opacity:0;transition:opacity .9s ease}
+.phrase span{display:inline-block;opacity:0;transform:translateY(6px);
+  transition:opacity .5s ease,transform .5s ease}
+.phrase.on{opacity:1}
+.phrase.on span{opacity:1;transform:none}
+
+/* Cursor */
+.dot{position:fixed;left:0;top:0;width:6px;height:6px;margin:-3px 0 0 -3px;
+  border-radius:50%;background:var(--ink);z-index:5;pointer-events:none}
+.ring{position:fixed;left:0;top:0;width:38px;height:38px;margin:-19px 0 0 -19px;
+  border:1px solid rgba(244,241,234,.55);border-radius:50%;z-index:5;pointer-events:none}
+
+/* Entrada suave */
+.fade{animation:fade 2.2s ease both}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+
+@media (hover:none){
+  body{cursor:auto}.dot,.ring{display:none}
+  .brand{left:16px;top:20px}.soon{left:16px;bottom:20px}.loc{right:16px;bottom:20px}
+  :root{--spot:140px}
+}
+@media (prefers-reduced-motion:reduce){.media{animation:none}}
+</style>
+</head>
+<body>
+  <video class="media fade" autoplay muted loop playsinline poster="curral.jpg"
+         onerror="this.remove()">
+    <source src="curral.mp4" type="video/mp4">
+  </video>
+  <img class="media fade" src="curral.jpg" alt="Curral das Freiras" style="z-index:-1" onerror="this.style.display='none'">
+
+  <div class="veil" id="veil"></div>
+
+  <div class="brand fade">Curral das Freiras</div>
+  <div class="soon fade">Em breve</div>
+  <div class="loc fade">Madeira · Portugal</div>
+
+  <div class="phrase" id="phrase"></div>
+  <div class="dot" id="dot"></div>
+  <div class="ring" id="ring"></div>
+
+<script>
+/* ===== A TUA FRASE (curta) ===== */
+const FRASE = "Curral das Freiras, uma porta para o mundo.";
+/* =============================== */
+
+const root = document.documentElement;
+const phrase = document.getElementById('phrase');
+const dot = document.getElementById('dot');
+const ring = document.getElementById('ring');
+
+// Frase letra a letra
+phrase.innerHTML = [...FRASE].map((c,i)=>
+  `<span style="transition-delay:${i*22}ms">${c===' '?'&nbsp;':c}</span>`).join('');
+
+let W = innerWidth, H = innerHeight;
+let tx = W/2, ty = H/2;          // alvo (rato)
+let sx = tx, sy = ty;            // lanterna (suavizada)
+let px = tx, py = ty;            // frase (mais lenta)
+let rx = tx, ry = ty;            // anel do cursor
+let lastMove = 0, t0 = performance.now();
+
+addEventListener('resize',()=>{W=innerWidth;H=innerHeight});
+function move(x,y){tx=x;ty=y;lastMove=performance.now();phrase.classList.add('on')}
+addEventListener('pointermove',e=>move(e.clientX,e.clientY));
+addEventListener('touchmove',e=>{const t=e.touches[0];move(t.clientX,t.clientY)},{passive:true});
+document.addEventListener('mouseleave',()=>{lastMove=0});
+
+function loop(now){
+  // Sem rato há 3 s: a lanterna passeia sozinha pela imagem
+  if(now - lastMove > 3000){
+    const t=(now-t0)/1000;
+    tx = W*(.5+.28*Math.sin(t*.23));
+    ty = H*(.5+.2*Math.sin(t*.31+1));
+    if(now - lastMove > 6000) phrase.classList.remove('on');
+  }
+  sx += (tx-sx)*.09;  sy += (ty-sy)*.09;
+  px += (tx-px)*.05;  py += (ty-py)*.05;
+  rx += (tx-rx)*.2;   ry += (ty-ry)*.2;
+
+  root.style.setProperty('--x', sx+'px');
+  root.style.setProperty('--y', sy+'px');
+
+  // frase ligeiramente abaixo/à direita do rato, sem sair do ecrã
+  const pw = phrase.offsetWidth;
+  const fx = Math.min(Math.max(px+24, 16), W-pw-16);
+  const fy = Math.min(py+34, H-60);
+  phrase.style.transform = `translate(${fx}px,${fy}px)`;
+
+  dot.style.transform  = `translate(${tx}px,${ty}px)`;
+  ring.style.transform = `translate(${rx}px,${ry}px)`;
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
