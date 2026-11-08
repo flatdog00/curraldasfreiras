@@ -76,6 +76,32 @@ body{background:var(--bg);color:var(--ink);font-family:"Outfit",system-ui,sans-s
 .lb button:hover{opacity:1}.lb .x{top:10px;right:14px}.lb .prev{left:6px}.lb .next{right:6px}
 
 footer{padding:24px 16px 34px;text-align:center;font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
+
+/* ---------- NÉVOA (imersivo) ---------- */
+.fog{position:absolute;inset:-20%;pointer-events:none;mix-blend-mode:screen;opacity:.55}
+.fog i{position:absolute;border-radius:50%;filter:blur(60px);background:radial-gradient(closest-side,rgba(235,240,238,.35),rgba(235,240,238,0))}
+.fog i:nth-child(1){width:70vw;height:28vh;left:5%;top:52%;animation:drift1 46s ease-in-out infinite alternate}
+.fog i:nth-child(2){width:60vw;height:22vh;left:40%;top:62%;animation:drift2 58s ease-in-out infinite alternate}
+.fog i:nth-child(3){width:50vw;height:18vh;left:20%;top:70%;opacity:.7;animation:drift1 70s ease-in-out infinite alternate-reverse}
+@keyframes drift1{from{transform:translateX(-12vw)}to{transform:translateX(14vw)}}
+@keyframes drift2{from{transform:translateX(10vw)}to{transform:translateX(-16vw)}}
+
+/* ---------- CONTAGEM REGRESSIVA ---------- */
+.count{position:absolute;left:0;right:0;bottom:clamp(90px,15vh,150px);display:flex;flex-direction:column;align-items:center;
+  pointer-events:none;animation:rise 2s 1s cubic-bezier(.2,.7,.2,1) both}
+.count .lead{font-size:.62rem;letter-spacing:.42em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
+.units{display:flex;align-items:flex-start;gap:clamp(10px,2.4vw,34px)}
+.u{display:flex;flex-direction:column;align-items:center;min-width:clamp(54px,9vw,130px)}
+.u b{font-weight:100;font-size:clamp(2.6rem,7.5vw,6.4rem);line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em;
+  display:inline-block;text-shadow:0 4px 40px rgba(0,0,0,.4)}
+.u b.tick{animation:tick .7s cubic-bezier(.2,.7,.2,1)}
+@keyframes tick{0%{opacity:.15;filter:blur(6px);transform:translateY(-10px)}100%{opacity:1;filter:none;transform:none}}
+.u small{margin-top:10px;font-size:.58rem;letter-spacing:.36em;text-transform:uppercase;color:var(--muted)}
+.sep{font-weight:100;font-size:clamp(2rem,5vw,4.4rem);line-height:1.1;opacity:.25}
+.count .date{margin-top:20px;font-size:.62rem;letter-spacing:.42em;color:var(--muted)}
+.count.done .units{display:none}
+@media (max-width:640px){.sep{display:none}.units{gap:4px}.u{min-width:21vw}.u b{font-size:2.4rem}.u small{font-size:.5rem;letter-spacing:.22em}.meta{font-size:.52rem;letter-spacing:.24em}}
+@media (prefers-reduced-motion:reduce){.fog i{animation:none}.u b.tick{animation:none}}
 </style>
 </head>
 <body>
@@ -84,6 +110,7 @@ footer{padding:24px 16px 34px;text-align:center;font-size:.58rem;letter-spacing:
   <div class="sticky" id="sticky">
     <img class="pano" id="pano" alt="Vale do Curral das Freiras visto do ar"
          src="assets/pano-01.jpg" srcset="assets/pano-01-m.jpg 1600w, assets/pano-01.jpg 4096w" sizes="300vw">
+    <div class="fog"><i></i><i></i><i></i></div>
     <div class="shade"></div>
     <div class="title" id="title">
       <img class="mark" src="assets/simbolo-branco.svg" alt="">
@@ -91,6 +118,16 @@ footer{padding:24px 16px 34px;text-align:center;font-size:.58rem;letter-spacing:
       <p>uma porta para o mundo</p>
     </div>
     <div class="cap" id="cap"><small>No fundo do vale</small>a aldeia</div>
+    <div class="count" id="count">
+      <div class="lead" id="lead">Lançamento</div>
+      <div class="units">
+        <div class="u"><b id="cd-d">000</b><small>dias</small></div><span class="sep">:</span>
+        <div class="u"><b id="cd-h">00</b><small>horas</small></div><span class="sep">:</span>
+        <div class="u"><b id="cd-m">00</b><small>minutos</small></div><span class="sep">:</span>
+        <div class="u"><b id="cd-s">00</b><small>segundos</small></div>
+      </div>
+      <div class="date">05 · 02 · 2028</div>
+    </div>
     <div class="hint" id="hint"></div>
     
     <div class="meta"><span>Em breve</span><span>32°43′N · 16°58′W</span></div>
@@ -174,6 +211,23 @@ lb.querySelector('.next').onclick=e=>{e.stopPropagation();show(cur+1)};
 lb.onclick=e=>{if(e.target===lb)lb.classList.remove('open')};
 addEventListener('keydown',e=>{if(!lb.classList.contains('open'))return;if(e.key==='Escape')lb.classList.remove('open');
   if(e.key==='ArrowLeft')show(cur-1);if(e.key==='ArrowRight')show(cur+1)});
+
+/* ===== CONTAGEM REGRESSIVA: 5 fev 2028, 00:00 (hora da Madeira = UTC+0 em fevereiro) ===== */
+(function(){
+  const T=Date.UTC(2028,1,5,0,0,0);
+  const el={d:document.getElementById('cd-d'),h:document.getElementById('cd-h'),m:document.getElementById('cd-m'),s:document.getElementById('cd-s')};
+  const box=document.getElementById('count'),lead=document.getElementById('lead');
+  const last={};
+  function set(k,v){if(last[k]===v)return;last[k]=v;const e=el[k];e.textContent=v;e.classList.remove('tick');void e.offsetWidth;e.classList.add('tick')}
+  function tick(){
+    let ms=T-Date.now();
+    if(ms<=0){box.classList.add('done');lead.textContent='Já chegámos';return}
+    const s=Math.floor(ms/1000),d=Math.floor(s/86400),h=Math.floor(s%86400/3600),m=Math.floor(s%3600/60),sec=s%60;
+    set('d',String(d).padStart(3,'0'));set('h',String(h).padStart(2,'0'));set('m',String(m).padStart(2,'0'));set('s',String(sec).padStart(2,'0'));
+    setTimeout(tick,1000-Date.now()%1000);
+  }
+  tick();
+})();
 </script>
 </body>
 </html>
