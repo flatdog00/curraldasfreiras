@@ -164,7 +164,7 @@ html[lang=ar] body{font-family:"Outfit","Noto Sans Arabic",system-ui,sans-serif}
     </div>
     
     
-    <div class="meta"><span>Em breve</span><span>32°43′N · 16°58′W</span></div>
+    <div class="meta"><span data-i="soon">Em breve</span><span>32°43′N · 16°58′W</span></div>
   </div>
 </section>
 
@@ -219,12 +219,12 @@ requestAnimationFrame(frame);
 
 /* ===== IDIOMAS ===== */
 const I18N={
- pt:{tag:'uma porta para o mundo',lead:'Lançamento',d:'dias',h:'horas',m:'minutos',s:'segundos',done:'Já chegámos'},
- en:{tag:'a door to the world',lead:'Launch',d:'days',h:'hours',m:'minutes',s:'seconds',done:'We are here'},
- it:{tag:'una porta sul mondo',lead:'Lancio',d:'giorni',h:'ore',m:'minuti',s:'secondi',done:'Ci siamo'},
- de:{tag:'ein Tor zur Welt',lead:'Start',d:'Tage',h:'Stunden',m:'Minuten',s:'Sekunden',done:'Wir sind da'},
- zh:{tag:'通往世界的一扇门',lead:'即将上线',d:'天',h:'小时',m:'分钟',s:'秒',done:'我们来了'},
- ar:{tag:'بوابة إلى العالم',lead:'الإطلاق',d:'أيام',h:'ساعات',m:'دقائق',s:'ثوانٍ',done:'لقد وصلنا'}
+ pt:{tag:'uma porta para o mundo',lead:'Lançamento',d:'dias',h:'horas',m:'minutos',s:'segundos',done:'Já chegámos',soon:'Em breve'},
+ en:{tag:'a door to the world',lead:'Launch',d:'days',h:'hours',m:'minutes',s:'seconds',done:'We are here',soon:'Coming soon'},
+ it:{tag:'una porta sul mondo',lead:'Lancio',d:'giorni',h:'ore',m:'minuti',s:'secondi',done:'Ci siamo',soon:'Prossimamente'},
+ de:{tag:'ein Tor zur Welt',lead:'Start',d:'Tage',h:'Stunden',m:'Minuten',s:'Sekunden',done:'Wir sind da',soon:'Demnächst'},
+ zh:{tag:'通往世界的一扇门',lead:'即将上线',d:'天',h:'小时',m:'分钟',s:'秒',done:'我们来了',soon:'敬请期待'},
+ ar:{tag:'بوابة إلى العالم',lead:'الإطلاق',d:'أيام',h:'ساعات',m:'دقائق',s:'ثوانٍ',done:'لقد وصلنا',soon:'قريبًا'}
 };
 const FONTS={zh:'Noto+Sans+SC:wght@300;400',ar:'Noto+Sans+Arabic:wght@300;400'};
 let LANG='pt';
