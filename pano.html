@@ -112,6 +112,11 @@ footer{padding:24px 16px 34px;text-align:center;font-size:.58rem;letter-spacing:
 .social a:hover{opacity:1}
 .social svg{width:15px;height:15px;fill:#fff;display:block}
 @media (max-width:640px){.sep{display:none}.units{gap:4px}.u{min-width:21vw}.u b{font-size:2rem}.u small{font-size:.5rem;letter-spacing:.22em}.meta{font-size:.52rem;letter-spacing:.24em}}
+.fog{transition:none;will-change:transform}
+.mist{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen}
+.glow{position:absolute;left:0;top:0;width:520px;height:520px;margin:-260px 0 0 -260px;border-radius:50%;pointer-events:none;
+  background:radial-gradient(closest-side,rgba(255,244,225,.10),rgba(255,244,225,0));mix-blend-mode:soft-light;opacity:0;transition:opacity .8s;will-change:transform}
+@media (hover:none){.glow{display:none}}
 @media (prefers-reduced-motion:reduce){.fog i{animation:none}.u b.tick{animation:none}}
 /* ---------- IDIOMAS ---------- */
 .lang{position:absolute;top:26px;right:32px;display:flex;gap:14px;font-size:.62rem;letter-spacing:.28em;pointer-events:auto;z-index:5}
@@ -133,7 +138,9 @@ html[lang=ar] body{font-family:"Outfit","Noto Sans Arabic",system-ui,sans-serif}
   <div class="sticky" id="sticky">
     <img class="pano" id="pano" alt="Vale do Curral das Freiras visto do ar"
          src="assets/pano-01.jpg" srcset="assets/pano-01-m.jpg 1600w, assets/pano-01.jpg 4096w" sizes="300vw">
-    <div class="fog"><i></i><i></i><i></i></div>
+    <div class="fog" id="fog"><i></i><i></i><i></i></div>
+    <canvas class="mist" id="mist"></canvas>
+    <div class="glow" id="glow"></div>
     <div class="shade"></div>
     <nav class="lang" id="lang">
       <a href="?lang=pt" lang="pt">PT</a><a href="?lang=en" lang="en">EN</a><a href="?lang=it" lang="it">IT</a><a href="?lang=de" lang="de">DE</a><a href="?lang=zh" lang="zh">中文</a><a href="?lang=ar" lang="ar">عربي</a>
@@ -203,7 +210,7 @@ function frame(){
   if(IW){
     const s=z, w=IW*s, h=IH*s;
     // parallax do rato: ligeiro desvio, mais forte com mais zoom
-    let tx=W/2-cx*w - smx*40*s, ty=H/2-cy*h - smy*24*s;
+    let tx=W/2-cx*w - smx*18*s, ty=H/2-cy*h - smy*24*s;
     tx=Math.min(0,Math.max(W-w,tx)); ty=Math.min(0,Math.max(H-h,ty));   // nunca mostrar bordas
     pano.style.transform=`translate3d(${tx}px,${ty}px,0) scale(${s})`;
   }
@@ -216,6 +223,46 @@ function frame(){
 requestAnimationFrame(frame);
 
 
+
+/* ===== INTERAÇÃO DO RATO: parallax suave + névoa que se afasta + luz ===== */
+(function(){
+  const RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const cv=document.getElementById('mist'),cx=cv.getContext('2d'),glow=document.getElementById('glow'),fog=document.getElementById('fog');
+  const Q=.5; let cw,ch; const P=[]; const N=innerWidth<700?20:34;
+  // sprite de névoa
+  const sp=document.createElement('canvas');sp.width=sp.height=128;const g=sp.getContext('2d');
+  const rg=g.createRadialGradient(64,64,0,64,64,64);rg.addColorStop(0,'rgba(238,242,240,.38)');rg.addColorStop(.5,'rgba(238,242,240,.10)');rg.addColorStop(1,'rgba(238,242,240,0)');
+  g.fillStyle=rg;g.fillRect(0,0,128,128);
+  function rs(){cw=cv.width=Math.round(cv.clientWidth*Q);ch=cv.height=Math.round(cv.clientHeight*Q)}
+  rs();addEventListener('resize',rs);
+  for(let i=0;i<N;i++)P.push({x:Math.random(),y:.45+Math.random()*.5,vx:0,vy:0,r:.08+Math.random()*.14,a:.10+Math.random()*.22,d:.00004+Math.random()*.00008});
+  let px=-1,py=-1,pvx=0,pvy=0,lt=0,act=0;
+  addEventListener('pointermove',e=>{
+    const r=cv.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;
+    if(px>=0){pvx=x-px;pvy=y-py}px=x;py=y;act=1;
+    mx=x*2-1;my=y*2-1;
+    glow.style.opacity=1;glow.style.transform=`translate3d(${e.clientX-r.left}px,${e.clientY-r.top}px,0)`;
+  },{passive:true});
+  document.addEventListener('pointerleave',()=>{glow.style.opacity=0;act=0;mx=my=0});
+  if(RM)return;
+  function loop(){
+    cx.clearRect(0,0,cw,ch);
+    const ar=cw/ch;
+    for(const p of P){
+      if(act){
+        const dx=(p.x-px)*ar,dy=p.y-py,dd=Math.sqrt(dx*dx+dy*dy),R=.16;
+        if(dd<R){const f=(1-dd/R);p.vx+=pvx*f*.35+dx/(dd+.001)*f*.0009;p.vy+=pvy*f*.35+dy/(dd+.001)*f*.0009}
+      }
+      p.vx*=.94;p.vy*=.94;p.x+=p.vx+p.d;p.y+=p.vy;
+      if(p.x>1.25)p.x=-.25; if(p.x<-.25)p.x=1.25; if(p.y<.3)p.vy+=.0004; if(p.y>1.15)p.vy-=.0004;
+      const s=p.r*ch*2;cx.globalAlpha=p.a;cx.drawImage(sp,p.x*cw-s,p.y*ch-s*.5,s*2,s);
+    }
+    pvx*=.85;pvy*=.85;
+    fog.style.transform=`translate3d(${-smx*26}px,${-smy*10}px,0)`;
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+})();
 
 /* ===== IDIOMAS ===== */
 const I18N={
