@@ -3,8 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Curral das Freiras</title>
-<meta name="description" content="Curral das Freiras, Madeira — uma porta para o mundo.">
+<title>curraldasfreiras.com</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<meta name="description" content="curraldasfreiras.com — Curral das Freiras, Madeira. Uma porta para o mundo.">
 <meta name="robots" content="noindex">
 <link rel="preload" as="image" href="assets/pano-01.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,8 +26,10 @@ body{background:var(--bg);color:var(--ink);font-family:"Outfit",system-ui,sans-s
   background:linear-gradient(180deg,rgba(8,10,9,.35) 0%,rgba(8,10,9,0) 35%,rgba(8,10,9,0) 60%,rgba(8,10,9,.55) 100%)}
 .title{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
   padding-top:14vh;text-align:center;pointer-events:none;padding-left:16px;padding-right:16px}
-.title h1{font-weight:100;font-size:clamp(2.6rem,9vw,8rem);letter-spacing:-.02em;line-height:.95;
+.title h1{font-weight:100;font-size:clamp(2.2rem,7.4vw,7rem);letter-spacing:-.02em;line-height:.95;
   text-shadow:0 4px 40px rgba(0,0,0,.35);animation:rise 1.8s .2s cubic-bezier(.2,.7,.2,1) both}
+.title .mark{width:clamp(70px,8vw,110px);height:auto;margin-bottom:22px;opacity:.95;animation:rise 1.8s cubic-bezier(.2,.7,.2,1) both}
+.title h1 span{opacity:.55}
 .title p{margin-top:18px;font-weight:200;font-size:clamp(.85rem,1.4vw,1.05rem);letter-spacing:.24em;opacity:.9;
   animation:rise 1.8s .6s cubic-bezier(.2,.7,.2,1) both}
 .cap{position:absolute;left:50%;bottom:90px;transform:translateX(-50%);text-align:center;pointer-events:none;
@@ -83,7 +86,8 @@ footer{padding:24px 16px 34px;text-align:center;font-size:.58rem;letter-spacing:
          src="assets/pano-01.jpg" srcset="assets/pano-01-m.jpg 1600w, assets/pano-01.jpg 4096w" sizes="300vw">
     <div class="shade"></div>
     <div class="title" id="title">
-      <h1>Curral das Freiras</h1>
+      <img class="mark" src="assets/simbolo-branco.svg" alt="">
+      <h1>curraldasfreiras<span>.com</span></h1>
       <p>uma porta para o mundo</p>
     </div>
     <div class="cap" id="cap"><small>No fundo do vale</small>a aldeia</div>
@@ -99,7 +103,7 @@ footer{padding:24px 16px 34px;text-align:center;font-size:.58rem;letter-spacing:
   <div class="mosaic" id="mosaic"></div>
 </section>
 
-<footer>© Curral das Freiras · Madeira · Portugal</footer>
+<footer>© curraldasfreiras.com · Madeira · Portugal</footer>
 
 <div class="lb" id="lb"><button class="x" aria-label="Fechar">✕</button><button class="prev" aria-label="Anterior">‹</button>
   <img alt=""><button class="next" aria-label="Seguinte">›</button><p></p></div>
