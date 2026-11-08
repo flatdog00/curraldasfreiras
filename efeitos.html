@@ -251,10 +251,9 @@ void main(){
     float r=min(R.x,R.y)*.22,d=length(p-M);
     float k=smoothstep(r,r*.55,d)*act;
     vec2 pp=mix(p,M+(p-M)/1.18,k);
-    vec2 off=normalize(p-M+.001)*k*1.5;
-    c=vec3(texture(I,uvOf(pp+off)).r,texture(I,uvOf(pp)).g,texture(I,uvOf(pp-off)).b);
-    c*=1.+.08*k;
-    float ring=smoothstep(r*.08,0.,abs(d-r*.78))*act*.12;c+=ring;
+    c=texture(I,uvOf(pp)).rgb;
+    c*=1.+.04*k;
+    float ring=smoothstep(2.5,0.,abs(d-r*.82))*act*.18;c+=ring;
   }else{
     c=texture(I,uvOf(p)).rgb;
     vec3 b=textureLod(I,uvOf(p),5.5).rgb;
