@@ -98,7 +98,7 @@ footer{padding:24px 16px 34px;text-align:center;font-size:.58rem;letter-spacing:
 .count .lead{font-size:.62rem;letter-spacing:.42em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
 .units{display:flex;align-items:flex-start;gap:clamp(8px,1.6vw,22px)}
 .u{display:flex;flex-direction:column;align-items:center;min-width:clamp(50px,6.4vw,96px)}
-.u b{font-weight:300;font-size:clamp(2rem,4.6vw,4rem);line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em;
+.u b{font-weight:300;font-size:clamp(2rem,4.6vw,4rem);line-height:1;letter-spacing:-.02em;
   display:inline-block;text-shadow:0 4px 40px rgba(0,0,0,.4)}
 .u b.tick{animation:tick .7s cubic-bezier(.2,.7,.2,1)}
 @keyframes tick{0%{opacity:.15;filter:blur(6px);transform:translateY(-10px)}100%{opacity:1;filter:none;transform:none}}
@@ -125,8 +125,7 @@ html[lang=zh] .u small,html[lang=ar] .u small,html[lang=zh] .lead,html[lang=ar] 
 html[lang=zh] body{font-family:"Outfit","Noto Sans SC",system-ui,sans-serif}
 html[lang=ar] body{font-family:"Outfit","Noto Sans Arabic",system-ui,sans-serif}
 @media (max-width:640px){.lang{top:18px;right:16px;gap:11px;font-size:.56rem}}
-.ptx{transition:color .3s ease,text-shadow .3s ease}
-.ptx.hid{color:transparent!important;text-shadow:none!important;transition:color .12s,text-shadow .12s}
+.ptx.hid{color:transparent!important;text-shadow:none!important;transition:none!important}
 #pt{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:4}
 </style>
 </head>
@@ -316,75 +315,98 @@ void main(){
 })();
 
 
-/* ===== D · TEXTO FEITO DE PARTÍCULAS (afasta-se com o rato e volta) ===== */
+/* ===== D · TEXTO QUE SE DESFAZ EM PARTÍCULAS (afasta-se com o rato e volta) ===== */
 window.FXMODE=3;
 (function(){
-  const cv=document.getElementById('pt'),x=cv.getContext('2d'),DPR=Math.min(devicePixelRatio,2);
+  const cv=document.getElementById('pt'),x=cv.getContext('2d'),DPR=Math.min(devicePixelRatio,2),PX=30,PY=16;
   const els=[document.querySelector('.title h1'),document.querySelector('.title p'),...document.querySelectorAll('.u b')];
   els.forEach(e=>e.classList.add('ptx'));
-  const G=els.map(e=>({e,txt:'',P:[],k:e.tagName==='B'?.09:.022,on:false,ga:0,still:0}));
+  const G=els.map(e=>({e,txt:'',P:[],k:e.tagName==='B'?.09:.04,on:false,still:0,sl:document.createElement('canvas'),gc:document.createElement('canvas')}));
   const off=document.createElement('canvas'),ox=off.getContext('2d',{willReadFrequently:true});
-  function sample(e){
-    const r=e.getBoundingClientRect(),cs=getComputedStyle(e),fs=parseFloat(cs.fontSize);
-    const S=2,W=Math.ceil(r.width+60)*S,H=Math.ceil(r.height+30)*S;off.width=W;off.height=H;
-    ox.setTransform(S,0,0,S,0,0);ox.clearRect(0,0,W,H);ox.fillStyle='#fff';ox.font=`${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
-    try{ox.letterSpacing=cs.letterSpacing}catch(_){}
-    ox.textAlign='center';ox.textBaseline='middle';
-    const ls=parseFloat(cs.letterSpacing)||0;ox.fillText(e.textContent,W/S/2+ls/2,H/S/2+fs*.05);
-    const d=ox.getImageData(0,0,W,H).data,pts=[],st=innerWidth<700?3:2;
-    for(let y=0;y<H;y+=st)for(let xx=0;xx<W;xx+=st){const a=d[(y*W+xx)*4+3];if(a>40)pts.push([xx/S-W/S/2+(Math.random()-.5)*.6,y/S-H/S/2+(Math.random()-.5)*.6,a/255])}
-    for(let i=pts.length-1;i>0;i--){const j=(Math.random()*(i+1))|0;[pts[i],pts[j]]=[pts[j],pts[i]]}
-    return {pts,size:fs>40?1.05:.85};
+  // desenha o texto exatamente como o browser o põe na página
+  function typeset(c,e,S,shadow){
+    const r=e.getBoundingClientRect(),cs=getComputedStyle(e);
+    c.setTransform(S,0,0,S,0,0);c.font=`${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+    try{c.letterSpacing='0px'}catch(_){}
+    c.textAlign='left';c.textBaseline='alphabetic';
+    const fA=c.measureText('Hg').fontBoundingBoxAscent;
+    if(shadow&&cs.textShadow&&cs.textShadow!=='none'){const n=cs.textShadow.match(/rgba?\([^)]*\)|-?[\d.]+px/g)||[];const col=n.find(v=>v.startsWith('rgb'))||'rgba(0,0,0,.35)';const v=n.filter(v=>v.endsWith('px')).map(parseFloat);
+      c.shadowColor=col;c.shadowOffsetX=(v[0]||0)*S;c.shadowOffsetY=(v[1]||0)*S;c.shadowBlur=(v[2]||0)*S}
+    c.fillStyle='#f4f1ea';
+    // cada letra na posição exata que o browser lhe deu
+    const rg=document.createRange(),tw=document.createTreeWalker(e,NodeFilter.SHOW_TEXT);let nd;
+    while(nd=tw.nextNode()){const s=nd.textContent;for(let i=0;i<s.length;i++){if(s[i]===' ')continue;rg.setStart(nd,i);rg.setEnd(nd,i+1);const q=rg.getBoundingClientRect();
+      c.fillText(s[i],q.left-r.left+PX,q.top-r.top+PY+fA)}}
+    c.shadowColor='transparent';
   }
-  function rebuild(g,first){
-    const {pts,size}=sample(g.e);const old=g.P,r=g.e.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
-    g.P=pts.map((p,i)=>{const o=old.length?old[i%old.length]:null;
-      const mv=o&&g.on;return {hx:p[0],hy:p[1],a:p[2],s:size*(.8+Math.random()*.5),x:mv?o.x:cx+p[0],y:mv?o.y:cy+p[1],vx:mv?o.vx:0,vy:mv?o.vy:0,ph:Math.random()*6.28}});
-    g.txt=g.e.textContent;
+  function rebuild(g){
+    const e=g.e,r=e.getBoundingClientRect(),W=Math.ceil(r.width+PX*2),H=Math.ceil(r.height+PY*2);
+    // camada sólida
+    g.sl.width=g.gc.width=W*DPR;g.sl.height=g.gc.height=H*DPR;const sc=g.sl.getContext('2d');sc.clearRect(0,0,W*DPR,H*DPR);typeset(sc,e,DPR,true);
+    g.W=W;g.H=H;
+    // pontos (sem sombra)
+    const S=2;off.width=W*S;off.height=H*S;ox.clearRect(0,0,W*S,H*S);typeset(ox,e,S,false);
+    const d=ox.getImageData(0,0,W*S,H*S).data,pts=[],st=innerWidth<700?3:2;
+    for(let y=0;y<H*S;y+=st)for(let xx=0;xx<W*S;xx+=st){const a=d[(y*W*S+xx)*4+3];if(a>30)pts.push([xx/S-PX,y/S-PY,a/255])}
+    for(let i=pts.length-1;i>0;i--){const j=(Math.random()*(i+1))|0;[pts[i],pts[j]]=[pts[j],pts[i]]}
+    g.cell=st/S*1.7;const fs=parseFloat(getComputedStyle(e).fontSize),size=fs>40?1.1:.9,old=g.P;
+    g.P=pts.map((p,i)=>{const o=old.length?old[i%old.length]:null,mv=o&&g.on;
+      return {hx:p[0],hy:p[1],a:p[2],s:size*(.85+Math.random()*.4),x:mv?o.x:r.left+p[0],y:mv?o.y:r.top+p[1],vx:mv?o.vx:0,vy:mv?o.vy:0,ph:Math.random()*6.28}});
+    g.txt=e.textContent;g.lw=r.width;g.lh=r.height;
   }
   function rs(){cv.width=cv.clientWidth*DPR;cv.height=cv.clientHeight*DPR;G.forEach(g=>g.txt='')}
-  rs();addEventListener('resize',rs);
-  let ready=false;(document.fonts?document.fonts.ready:Promise.resolve()).then(()=>setTimeout(()=>{G.forEach(g=>rebuild(g,true));ready=true},250));
+  rs();addEventListener('resize',rs);window.__G=G;
+  let ready=false;(document.fonts?document.fonts.ready:Promise.resolve()).then(()=>setTimeout(()=>{ready=true},200));
   let mx=-9999,my=-9999,vx=0,vy=0,lx=null,ly=null;
   addEventListener('pointermove',e=>{if(lx!==null){vx=vx*.5+(e.clientX-lx)*.5;vy=vy*.5+(e.clientY-ly)*.5}lx=mx=e.clientX;ly=my=e.clientY},{passive:true});
   document.addEventListener('pointerleave',()=>{mx=my=-9999;lx=null});
   let t0=performance.now();
   function loop(now){
     requestAnimationFrame(loop);
-    const on=window.FXMODE===3;
     const cr=cv.getBoundingClientRect();x.setTransform(DPR,0,0,DPR,-cr.left*DPR,-cr.top*DPR);x.clearRect(cr.left,cr.top,cr.width,cr.height);
-    if(!on||!ready)return;
+    if(window.FXMODE!==3||!ready)return;
     const tt=(now-t0)/1000,spd=Math.min(40,Math.hypot(vx,vy));
-    x.globalCompositeOperation='lighter';x.lineCap='round';
     for(const g of G){
-      if(g.e.textContent!==g.txt)rebuild(g,false);
-      const r=g.e.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,al=+getComputedStyle(g.e.parentElement).opacity||1;
+      const r=g.e.getBoundingClientRect();
       const R=Math.max(70,r.height*1.3)*(1+spd/40);
       const hov=mx>r.left-R*.6&&mx<r.right+R*.6&&my>r.top-R*.6&&my<r.bottom+R*.6;
+      if(!g.on&&!hov){if(g.e.classList.contains('hid'))g.e.classList.remove('hid');continue}
+      if(g.e.textContent!==g.txt||Math.abs(r.width-g.lw)>.5||Math.abs(r.height-g.lh)>.5)rebuild(g);
       if(hov){g.on=true;g.still=0}
-      g.e.classList.toggle('hid',g.on);
-      g.ga+=((g.on?1:0)-g.ga)*(g.on?.5:.12);
-      if(!g.on){for(const p of g.P){p.x=cx+p.hx;p.y=cy+p.hy;p.vx=p.vy=0}if(g.ga<.01)continue}
+      g.e.classList.add('hid');
+      const al=+getComputedStyle(g.e.parentElement).opacity||1;
+      // física
       let md=0;
       for(const p of g.P){
-        const hx=cx+p.hx,hy=cy+p.hy;
-        const dx=p.x-mx,dy=p.y-my,d2=dx*dx+dy*dy;
+        const hx=r.left+p.hx,hy=r.top+p.hy,dx=p.x-mx,dy=p.y-my,d2=dx*dx+dy*dy;
         if(d2<R*R){const d=Math.sqrt(d2)+.01,f=Math.pow(1-d/R,2);
           p.vx+=(dx/d)*f*(.7+spd*.05)+vx*f*.12+(-dy/d)*f*spd*.02;
           p.vy+=(dy/d)*f*(.7+spd*.05)+vy*f*.12+(dx/d)*f*spd*.02;}
-        // ondas lentas de "névoa" enquanto está fora do sítio
-        const ox=p.x-hx,oy=p.y-hy,od=Math.abs(ox)+Math.abs(oy);
+        const od=Math.abs(p.x-hx)+Math.abs(p.y-hy);
         if(od>6){const w=Math.min(1,od/60)*.06;p.vx+=Math.sin(p.y*.02+tt*1.2+p.ph)*w;p.vy+=Math.cos(p.x*.02+tt*.9+p.ph)*w-.012*Math.min(1,od/60)}
         p.vx+=(hx-p.x)*g.k;p.vy+=(hy-p.y)*g.k;p.vx*=.88;p.vy*=.88;const vm=Math.hypot(p.vx,p.vy);if(vm>7){p.vx*=7/vm;p.vy*=7/vm}
-        const px=p.x,py=p.y;p.x+=p.vx;p.y+=p.vy;
-        const sp=Math.abs(p.vx)+Math.abs(p.vy),fly=Math.min(1,od/40);if(od>md)md=od;
-        const a=p.a*al*g.ga*(.9+.1*Math.sin(tt*2+p.ph))*(1-fly*.25);
-        if(sp>2.5&&fly>.15){x.strokeStyle=`rgba(244,241,234,${a*.45})`;x.lineWidth=p.s*.9;x.beginPath();x.moveTo(p.x-p.vx*1.1,p.y-p.vy*1.1);x.lineTo(p.x,p.y);x.stroke()}
-        else{x.fillStyle=`rgba(244,241,234,${a})`;x.fillRect(p.x-p.s/2,p.y-p.s/2,p.s,p.s)}
+        p.x+=p.vx;p.y+=p.vy;
+        // de volta a casa: encaixa sem saltos
+        if(!hov&&Math.abs(p.x-hx)+Math.abs(p.y-hy)<.8&&vm<.4){p.x=hx;p.y=hy;p.vx=p.vy=0}
+        p.od=Math.abs(p.x-hx)+Math.abs(p.y-hy);if(p.od>md)md=p.od;
       }
-      if(g.on&&!hov){if(md<1.2){if(++g.still>10)g.on=false}else g.still=0}
+      // texto sólido com "buracos" onde as partículas saíram
+      const gx=g.gc.getContext('2d'),c=g.cell*DPR;
+      gx.setTransform(1,0,0,1,0,0);gx.globalCompositeOperation='copy';gx.drawImage(g.sl,0,0);gx.globalCompositeOperation='destination-out';
+      for(const p of g.P){if(p.od<.05)continue;gx.globalAlpha=Math.min(1,p.od/1.5);gx.fillRect((p.hx+PX)*DPR-c/2,(p.hy+PY)*DPR-c/2,c,c)}
+      gx.globalAlpha=1;gx.globalCompositeOperation='source-over';
+      x.globalAlpha=al;x.drawImage(g.gc,r.left-PX,r.top-PY,g.W,g.H);
+      // partículas soltas
+      x.globalCompositeOperation='lighter';
+      for(const p of g.P){if(p.od<.05)continue;
+        const w=Math.min(1,p.od/1.5),fly=Math.min(1,p.od/40),sp=Math.abs(p.vx)+Math.abs(p.vy);
+        const a=p.a*al*w*(.9+.1*Math.sin(tt*2+p.ph))*(1-fly*.25);
+        if(sp>2.5&&fly>.15){x.strokeStyle=`rgba(244,241,234,${a*.45})`;x.lineWidth=p.s*.9;x.beginPath();x.moveTo(p.x-p.vx*1.1,p.y-p.vy*1.1);x.lineTo(p.x,p.y);x.stroke()}
+        else{x.fillStyle=`rgba(244,241,234,${a})`;x.fillRect(p.x-p.s/2,p.y-p.s/2,p.s,p.s)}}
+      x.globalCompositeOperation='source-over';x.globalAlpha=1;
+      if(g.on&&!hov){if(md<.05){if(++g.still>3){g.on=false;g.e.classList.remove('hid')}}else g.still=0}
     }
-    x.globalCompositeOperation='source-over';vx*=.88;vy*=.88;
+    vx*=.88;vy*=.88;
   }
   requestAnimationFrame(loop);
 })();
