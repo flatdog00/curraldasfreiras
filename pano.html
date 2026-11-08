@@ -25,8 +25,8 @@ body{background:var(--bg);color:var(--ink);font-family:"Outfit",system-ui,sans-s
 .shade{position:absolute;inset:0;pointer-events:none;
   background:linear-gradient(180deg,rgba(8,10,9,.35) 0%,rgba(8,10,9,0) 35%,rgba(8,10,9,0) 60%,rgba(8,10,9,.55) 100%)}
 .title{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
-  padding-top:14vh;text-align:center;pointer-events:none;padding-left:16px;padding-right:16px}
-.title h1{font-weight:100;font-size:clamp(2.2rem,7.4vw,7rem);letter-spacing:-.02em;line-height:.95;
+  padding-top:16vh;text-align:center;pointer-events:none;padding-left:16px;padding-right:16px}
+.title h1{font-weight:200;font-size:clamp(2rem,5.6vw,5.2rem);letter-spacing:-.02em;line-height:.95;
   text-shadow:0 4px 40px rgba(0,0,0,.35);animation:rise 1.8s .2s cubic-bezier(.2,.7,.2,1) both}
 .title .mark{width:clamp(70px,8vw,110px);height:auto;margin-bottom:22px;opacity:.95;animation:rise 1.8s cubic-bezier(.2,.7,.2,1) both}
 .title h1 span{opacity:.55}
@@ -87,20 +87,21 @@ footer{padding:24px 16px 34px;text-align:center;font-size:.58rem;letter-spacing:
 @keyframes drift2{from{transform:translateX(10vw)}to{transform:translateX(-16vw)}}
 
 /* ---------- CONTAGEM REGRESSIVA ---------- */
-.count{position:absolute;left:0;right:0;bottom:clamp(90px,15vh,150px);display:flex;flex-direction:column;align-items:center;
+.count{position:absolute;left:0;right:0;bottom:clamp(74px,12vh,120px);display:flex;flex-direction:column;align-items:center;
   pointer-events:none;animation:rise 2s 1s cubic-bezier(.2,.7,.2,1) both}
 .count .lead{font-size:.62rem;letter-spacing:.42em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
-.units{display:flex;align-items:flex-start;gap:clamp(10px,2.4vw,34px)}
-.u{display:flex;flex-direction:column;align-items:center;min-width:clamp(54px,9vw,130px)}
-.u b{font-weight:100;font-size:clamp(2.6rem,7.5vw,6.4rem);line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em;
+.units{display:flex;align-items:flex-start;gap:clamp(8px,1.6vw,22px)}
+.u{display:flex;flex-direction:column;align-items:center;min-width:clamp(50px,6.4vw,96px)}
+.u b{font-weight:300;font-size:clamp(2rem,4.6vw,4rem);line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em;
   display:inline-block;text-shadow:0 4px 40px rgba(0,0,0,.4)}
 .u b.tick{animation:tick .7s cubic-bezier(.2,.7,.2,1)}
 @keyframes tick{0%{opacity:.15;filter:blur(6px);transform:translateY(-10px)}100%{opacity:1;filter:none;transform:none}}
 .u small{margin-top:10px;font-size:.58rem;letter-spacing:.36em;text-transform:uppercase;color:var(--muted)}
-.sep{font-weight:100;font-size:clamp(2rem,5vw,4.4rem);line-height:1.1;opacity:.25}
-.count .date{margin-top:20px;font-size:.62rem;letter-spacing:.42em;color:var(--muted)}
+.sep{font-weight:200;font-size:clamp(1.6rem,3.2vw,2.8rem);line-height:1.15;opacity:.3}
+.count .date{margin-top:16px;font-size:.62rem;letter-spacing:.42em;color:var(--muted)}
 .count.done .units{display:none}
-@media (max-width:640px){.sep{display:none}.units{gap:4px}.u{min-width:21vw}.u b{font-size:2.4rem}.u small{font-size:.5rem;letter-spacing:.22em}.meta{font-size:.52rem;letter-spacing:.24em}}
+.count .brand{margin-top:26px;width:clamp(150px,13vw,200px);height:auto;opacity:.75}
+@media (max-width:640px){.sep{display:none}.units{gap:4px}.u{min-width:21vw}.u b{font-size:2rem}.u small{font-size:.5rem;letter-spacing:.22em}.meta{font-size:.52rem;letter-spacing:.24em}}
 @media (prefers-reduced-motion:reduce){.fog i{animation:none}.u b.tick{animation:none}}
 </style>
 </head>
@@ -113,8 +114,7 @@ footer{padding:24px 16px 34px;text-align:center;font-size:.58rem;letter-spacing:
     <div class="fog"><i></i><i></i><i></i></div>
     <div class="shade"></div>
     <div class="title" id="title">
-      <img class="mark" src="assets/simbolo-branco.svg" alt="">
-      <h1>curraldasfreiras<span>.com</span></h1>
+      <h1>Curral das Freiras</h1>
       <p>uma porta para o mundo</p>
     </div>
     <div class="cap" id="cap"><small>No fundo do vale</small>a aldeia</div>
@@ -127,8 +127,9 @@ footer{padding:24px 16px 34px;text-align:center;font-size:.58rem;letter-spacing:
         <div class="u"><b id="cd-s">00</b><small>segundos</small></div>
       </div>
       <div class="date">05 · 02 · 2028</div>
+      <img class="brand" src="assets/logo-horizontal-branco.svg" alt="curraldasfreiras.com">
     </div>
-    <div class="hint" id="hint"></div>
+    
     
     <div class="meta"><span>Em breve</span><span>32°43′N · 16°58′W</span></div>
   </div>
@@ -156,7 +157,7 @@ const KEYS = [
 /* ============================================= */
 
 const pano=document.getElementById('pano'),sticky=document.getElementById('sticky'),stage=document.getElementById('stage');
-const title=document.getElementById('title'),cap=document.getElementById('cap'),hint=document.getElementById('hint');
+const title=document.getElementById('title'),cap=document.getElementById('cap');
 let prog=0,sp=0,mx=0,my=0,smx=0,smy=0,W,H,IW,IH;
 
 function size(){W=sticky.clientWidth;H=sticky.clientHeight;
@@ -185,7 +186,7 @@ function frame(){
     pano.style.transform=`translate3d(${tx}px,${ty}px,0) scale(${s})`;
   }
   title.style.opacity=Math.max(0,1-sp*2.4); title.style.transform=`translateY(${-sp*80}px)`;
-  hint.style.opacity=sp<.02?.55:0;
+  
   cap.style.opacity=sp>.8?Math.min(1,(sp-.8)*6):0;
   
   requestAnimationFrame(frame);
