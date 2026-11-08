@@ -19,5 +19,25 @@ Caderno de ideias para o projeto. Para acrescentar, basta dizer ao Claude: *"gua
 - [ ] Privacidade WHOIS — rever quando a oferta da Network Solutions acabar
 - [ ] Renovar o domínio antes de 5 nov 2027
 
+## Segredos na landing (prémios — ex.: t-shirt)
+- [ ] Mecanismos escondidos que levam a um enigma ou mini-jogo:
+  - Scroll 10× para baixo → o nevoeiro abre e aparece o enigma (computador)
+  - Tocar 3× na igreja da foto (telemóvel)
+  - Escrever "curral" no teclado (pista dada numa story)
+  - Hora secreta: só aparece às 05:02
+  - Caça ao tesouro: uma parte do código em cada rede social + site
+- [ ] Desafio: enigma sobre o Curral (ex.: Eira do Serrado) ou mini-jogo (apanhar o teleférico)
+- [ ] Resposta guardada encriptada (hash) para não se ver no código da página
+- [ ] Quem acerta recebe um código e manda por DM no Instagram → decidir: primeiro, sorteio ou nº limitado de t-shirts
+- [ ] Definir quantas t-shirts e a resposta do enigma
+
+## Outras redes / plataformas
+- [ ] Patreon — criar e juntar ícone ao site
+- [ ] YouTube — reservar o nome já, publicar mais tarde
+- [ ] LinkedIn — criar página
+
+## Animação
+- [ ] BD/animação do senhor a saltar de paraquedas da Eira do Serrado — rever o estilo com uma referência
+
 ---
 _Criado a 7 nov 2026_
