@@ -181,6 +181,7 @@ const KEYS = [
   {x:.55, y:.55, z:1.25},   // percorre o vale
   {x:.555,y:.64, z:2.40},   // mergulha na aldeia
 ];
+const MOB={x:.553,y:.62,z:1.25};   // telemóvel: casas da aldeia ao centro
 /* ============================================= */
 
 const pano=document.getElementById('pano'),sticky=document.getElementById('sticky'),stage=document.getElementById('stage');
@@ -203,7 +204,8 @@ function frame(){
   sp+=(prog-sp)*.075; smx+=(mx-smx)*.05; smy+=(my-smy)*.05;
   // posição entre os pontos-chave
   const seg=sp*(KEYS.length-1), i=Math.min(KEYS.length-2,Math.floor(seg)), t=ease(seg-i);
-  const A=KEYS[i],B=KEYS[i+1];
+  let A=KEYS[i],B=KEYS[i+1];
+  if(W<760){A=B=MOB}   // telemóvel: centro da aldeia
   const z=lerp(A.z,B.z,t), cx=lerp(A.x,B.x,t), cy=lerp(A.y,B.y,t);
   if(IW){
     const s=z, w=IW*s, h=IH*s;
