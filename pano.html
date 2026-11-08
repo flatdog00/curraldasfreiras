@@ -11,6 +11,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400&display=swap" rel="stylesheet">
+<link rel="alternate" hreflang="pt" href="https://curraldasfreiras.com/?lang=pt">
+<link rel="alternate" hreflang="en" href="https://curraldasfreiras.com/?lang=en">
+<link rel="alternate" hreflang="it" href="https://curraldasfreiras.com/?lang=it">
+<link rel="alternate" hreflang="de" href="https://curraldasfreiras.com/?lang=de">
+<link rel="alternate" hreflang="zh" href="https://curraldasfreiras.com/?lang=zh">
+<link rel="alternate" hreflang="ar" href="https://curraldasfreiras.com/?lang=ar">
 <style>
 :root{--ink:#f4f1ea;--bg:#0b0d0c;--muted:rgba(244,241,234,.6)}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -107,6 +113,18 @@ footer{padding:24px 16px 34px;text-align:center;font-size:.58rem;letter-spacing:
 .social svg{width:15px;height:15px;fill:#fff;display:block}
 @media (max-width:640px){.sep{display:none}.units{gap:4px}.u{min-width:21vw}.u b{font-size:2rem}.u small{font-size:.5rem;letter-spacing:.22em}.meta{font-size:.52rem;letter-spacing:.24em}}
 @media (prefers-reduced-motion:reduce){.fog i{animation:none}.u b.tick{animation:none}}
+/* ---------- IDIOMAS ---------- */
+.lang{position:absolute;top:26px;right:32px;display:flex;gap:14px;font-size:.62rem;letter-spacing:.28em;pointer-events:auto;z-index:5}
+.lang a{color:var(--muted);text-decoration:none;opacity:.7;transition:opacity .3s,color .3s;letter-spacing:.2em}
+.lang a:hover{opacity:1;color:var(--ink)}
+.lang a.on{opacity:1;color:var(--ink)}
+.lang a[lang=zh],.lang a[lang=ar]{letter-spacing:0;font-size:.72rem}
+html[lang=zh] .title p,html[lang=ar] .title p{letter-spacing:.08em;font-size:clamp(.95rem,1.5vw,1.15rem)}
+html[lang=zh] .lead,html[lang=ar] .lead,html[lang=zh] .u small,html[lang=ar] .u small{letter-spacing:.12em}
+html[lang=zh] .u small,html[lang=ar] .u small,html[lang=zh] .lead,html[lang=ar] .lead{font-size:.72rem}
+html[lang=zh] body{font-family:"Outfit","Noto Sans SC",system-ui,sans-serif}
+html[lang=ar] body{font-family:"Outfit","Noto Sans Arabic",system-ui,sans-serif}
+@media (max-width:640px){.lang{top:18px;right:16px;gap:11px;font-size:.56rem}}
 </style>
 </head>
 <body>
@@ -117,18 +135,21 @@ footer{padding:24px 16px 34px;text-align:center;font-size:.58rem;letter-spacing:
          src="assets/pano-01.jpg" srcset="assets/pano-01-m.jpg 1600w, assets/pano-01.jpg 4096w" sizes="300vw">
     <div class="fog"><i></i><i></i><i></i></div>
     <div class="shade"></div>
+    <nav class="lang" id="lang">
+      <a href="?lang=pt" lang="pt">PT</a><a href="?lang=en" lang="en">EN</a><a href="?lang=it" lang="it">IT</a><a href="?lang=de" lang="de">DE</a><a href="?lang=zh" lang="zh">中文</a><a href="?lang=ar" lang="ar">عربي</a>
+    </nav>
     <div class="title" id="title">
       <h1>Curral das Freiras</h1>
-      <p>uma porta para o mundo</p>
+      <p data-i="tag">uma porta para o mundo</p>
     </div>
     <div class="cap" id="cap"><small>No fundo do vale</small>a aldeia</div>
     <div class="count" id="count">
       <div class="lead" id="lead">Lançamento</div>
       <div class="units">
-        <div class="u"><b id="cd-d">000</b><small>dias</small></div><span class="sep">:</span>
-        <div class="u"><b id="cd-h">00</b><small>horas</small></div><span class="sep">:</span>
-        <div class="u"><b id="cd-m">00</b><small>minutos</small></div><span class="sep">:</span>
-        <div class="u"><b id="cd-s">00</b><small>segundos</small></div>
+        <div class="u"><b id="cd-d">000</b><small data-i="d">dias</small></div><span class="sep">:</span>
+        <div class="u"><b id="cd-h">00</b><small data-i="h">horas</small></div><span class="sep">:</span>
+        <div class="u"><b id="cd-m">00</b><small data-i="m">minutos</small></div><span class="sep">:</span>
+        <div class="u"><b id="cd-s">00</b><small data-i="s">segundos</small></div>
       </div>
       <div class="date">05 · 02 · 2028</div>
       <img class="brand" src="assets/logo-horizontal-branco.svg" alt="curraldasfreiras.com">
@@ -187,6 +208,36 @@ function frame(){
 requestAnimationFrame(frame);
 
 
+
+/* ===== IDIOMAS ===== */
+const I18N={
+ pt:{tag:'uma porta para o mundo',lead:'Lançamento',d:'dias',h:'horas',m:'minutos',s:'segundos',done:'Já chegámos'},
+ en:{tag:'a door to the world',lead:'Launch',d:'days',h:'hours',m:'minutes',s:'seconds',done:'We are here'},
+ it:{tag:'una porta sul mondo',lead:'Lancio',d:'giorni',h:'ore',m:'minuti',s:'secondi',done:'Ci siamo'},
+ de:{tag:'ein Tor zur Welt',lead:'Start',d:'Tage',h:'Stunden',m:'Minuten',s:'Sekunden',done:'Wir sind da'},
+ zh:{tag:'通往世界的一扇门',lead:'即将上线',d:'天',h:'小时',m:'分钟',s:'秒',done:'我们来了'},
+ ar:{tag:'بوابة إلى العالم',lead:'الإطلاق',d:'أيام',h:'ساعات',m:'دقائق',s:'ثوانٍ',done:'لقد وصلنا'}
+};
+const FONTS={zh:'Noto+Sans+SC:wght@300;400',ar:'Noto+Sans+Arabic:wght@300;400'};
+let LANG='pt';
+function setLang(l,push){
+  if(!I18N[l])l='pt';LANG=l;const L=I18N[l];
+  document.documentElement.lang=l;
+  document.querySelectorAll('[data-i]').forEach(e=>e.textContent=L[e.dataset.i]);
+  const lead=document.getElementById('lead');lead.textContent=document.getElementById('count').classList.contains('done')?L.done:L.lead;
+  document.querySelectorAll('#lang a').forEach(a=>a.classList.toggle('on',a.lang===l));
+  if(FONTS[l]&&!document.getElementById('f-'+l)){const k=document.createElement('link');k.id='f-'+l;k.rel='stylesheet';k.href='https://fonts.googleapis.com/css2?family='+FONTS[l]+'&display=swap';document.head.appendChild(k)}
+  try{localStorage.setItem('lang',l)}catch(e){}
+  if(push)history.replaceState(null,'',l==='pt'?location.pathname:'?lang='+l);
+}
+document.querySelectorAll('#lang a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();setLang(a.lang,true)}));
+(function(){
+  const q=new URLSearchParams(location.search).get('lang');
+  let s=null;try{s=localStorage.getItem('lang')}catch(e){}
+  const n=(navigator.language||'pt').slice(0,2).toLowerCase();
+  setLang(q||s||(I18N[n]?n:'pt'),false);
+})();
+
 /* ===== CONTAGEM REGRESSIVA: 5 fev 2028, 00:00 (hora da Madeira = UTC+0 em fevereiro) ===== */
 (function(){
   const T=Date.UTC(2028,1,5,0,0,0);
@@ -196,7 +247,7 @@ requestAnimationFrame(frame);
   function set(k,v){if(last[k]===v)return;last[k]=v;const e=el[k];e.textContent=v;e.classList.remove('tick');void e.offsetWidth;e.classList.add('tick')}
   function tick(){
     let ms=T-Date.now();
-    if(ms<=0){box.classList.add('done');lead.textContent='Já chegámos';return}
+    if(ms<=0){box.classList.add('done');lead.textContent=I18N[LANG].done;return}
     const s=Math.floor(ms/1000),d=Math.floor(s/86400),h=Math.floor(s%86400/3600),m=Math.floor(s%3600/60),sec=s%60;
     set('d',String(d).padStart(3,'0'));set('h',String(h).padStart(2,'0'));set('m',String(m).padStart(2,'0'));set('s',String(sec).padStart(2,'0'));
     setTimeout(tick,1000-Date.now()%1000);
