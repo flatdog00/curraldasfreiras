@@ -130,6 +130,9 @@ html[lang=ar] body{font-family:"Outfit","Noto Sans Arabic",system-ui,sans-serif}
   border:1px solid rgba(244,241,234,.18);border-radius:999px;padding:7px 14px;cursor:pointer;backdrop-filter:blur(6px)}
 #fx button.on{color:#111;background:var(--ink);border-color:var(--ink)}
 @media (max-width:640px){#fx{top:52px;left:16px}#fx button{padding:6px 10px;font-size:.5rem}}
+.dz{-webkit-mask-image:radial-gradient(circle var(--r,0px) at var(--x,-999px) var(--y,-999px),transparent 35%,#000 100%);
+  mask-image:radial-gradient(circle var(--r,0px) at var(--x,-999px) var(--y,-999px),transparent 35%,#000 100%)}
+#pt{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:4}
 </style>
 </head>
 <body>
@@ -141,7 +144,7 @@ html[lang=ar] body{font-family:"Outfit","Noto Sans Arabic",system-ui,sans-serif}
     <canvas id="gl" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none"></canvas>
     <div class="fog"><i></i><i></i><i></i></div>
     <div class="shade"></div>
-    <div id="fx"><button data-m="0" class="on">A · Ondulação</button><button data-m="1">B · Lente</button><button data-m="2">C · Relevo</button></div>
+    <div id="fx"><button data-m="3" class="on">D · Partículas</button><button data-m="0">A · Ondulação</button><button data-m="1">B · Lente</button><button data-m="2">C · Relevo</button></div>
     <nav class="lang" id="lang">
       <a href="?lang=pt" lang="pt">PT</a><a href="?lang=en" lang="en">EN</a><a href="?lang=it" lang="it">IT</a><a href="?lang=de" lang="de">DE</a><a href="?lang=zh" lang="zh">中文</a><a href="?lang=ar" lang="ar">عربي</a>
     </nav>
@@ -171,6 +174,7 @@ html[lang=ar] body{font-family:"Outfit","Noto Sans Arabic",system-ui,sans-serif}
     </div>
     
     
+    <canvas id="pt"></canvas>
     <div class="meta"><span data-i="soon">Em breve</span><span>32°43′N · 16°58′W</span></div>
   </div>
 </section>
@@ -254,6 +258,8 @@ void main(){
     c=texture(I,uvOf(pp)).rgb;
     c*=1.+.04*k;
     float ring=smoothstep(2.5,0.,abs(d-r*.82))*act*.18;c+=ring;
+  }else if(md==3){
+    c=texture(I,uvOf(p)).rgb;
   }else{
     c=texture(I,uvOf(p)).rgb;
     vec3 b=textureLod(I,uvOf(p),5.5).rgb;
@@ -273,7 +279,7 @@ void main(){
   const ti=gl.createTexture(),tt=gl.createTexture();
   // rasto do rato
   const tc=document.createElement('canvas'),tx=tc.getContext('2d');
-  let mxp=-1,myp=-1,lx=-1,ly=-1,act=0,sa=0,mode=0,ok=false,DPR=Math.min(devicePixelRatio,2);
+  let mxp=-1,myp=-1,lx=-1,ly=-1,act=0,sa=0,mode=3,ok=false,DPR=Math.min(devicePixelRatio,2);
   function rs(){cv.width=cv.clientWidth*DPR;cv.height=cv.clientHeight*DPR;tc.width=Math.ceil(cv.clientWidth/4);tc.height=Math.ceil(cv.clientHeight/4);tx.fillStyle='#000';tx.fillRect(0,0,tc.width,tc.height)}
   rs();addEventListener('resize',rs);
   function load(){
@@ -285,7 +291,7 @@ void main(){
   const L=()=>{try{load()}catch(e){console.warn(e)}};img.complete&&img.naturalWidth?L():img.addEventListener("load",L);
   addEventListener('pointermove',e=>{const r=cv.getBoundingClientRect();mxp=e.clientX-r.left;myp=e.clientY-r.top;act=1},{passive:true});
   document.addEventListener('pointerleave',()=>{act=0;lx=-1});
-  document.querySelectorAll('#fx button').forEach(bt=>bt.addEventListener('click',()=>{mode=+bt.dataset.m;document.querySelectorAll('#fx button').forEach(x=>x.classList.toggle('on',x===bt));tx.fillStyle='#000';tx.fillRect(0,0,tc.width,tc.height)}));
+  document.querySelectorAll('#fx button').forEach(bt=>bt.addEventListener('click',()=>{mode=+bt.dataset.m;window.FXMODE=mode;document.querySelectorAll('#fx button').forEach(x=>x.classList.toggle('on',x===bt));tx.fillStyle='#000';tx.fillRect(0,0,tc.width,tc.height)}));
   function loop(ts){
     requestAnimationFrame(loop);if(!ok)return;
     // rasto: desvanece e pinta o caminho do rato
@@ -304,6 +310,61 @@ void main(){
     gl.uniform4f(U('Q'),(r.left-c.left)*DPR,(r.top-c.top)*DPR,r.width*DPR,r.height*DPR);
     gl.uniform1i(U('md'),mode);gl.uniform1f(U('tm'),ts/1000);gl.uniform1f(U('act'),sa);
     gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+  }
+  requestAnimationFrame(loop);
+})();
+
+/* ===== D · TEXTO QUE SE DESINTEGRA EM PARTÍCULAS ===== */
+window.FXMODE=3;
+(function(){
+  const cv=document.getElementById('pt'),x=cv.getContext('2d'),DPR=Math.min(devicePixelRatio,2);
+  const els=[document.querySelector('.title h1'),document.querySelector('.title p'),...document.querySelectorAll('.u b')];
+  els.forEach(e=>e.classList.add('dz'));
+  const T=els.map(e=>({e,pts:[],txt:'',w:0,h:0,r:0,tr:0,x:-999,y:-999}));
+  const off=document.createElement('canvas'),ox=off.getContext('2d',{willReadFrequently:true});
+  function sample(o){
+    const e=o.e,r=e.getBoundingClientRect(),cs=getComputedStyle(e);
+    const W=Math.ceil(r.width)+40,H=Math.ceil(r.height)+20;off.width=W;off.height=H;
+    ox.clearRect(0,0,W,H);ox.fillStyle='#fff';ox.font=`${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+    try{ox.letterSpacing=cs.letterSpacing}catch(_){}
+    ox.textAlign='center';ox.textBaseline='middle';ox.fillText(e.textContent,W/2+parseFloat(cs.letterSpacing||0)/2,H/2+parseFloat(cs.fontSize)*.04);
+    const d=ox.getImageData(0,0,W,H).data,pts=[],st=parseFloat(cs.fontSize)>40?3:2;
+    for(let y=0;y<H;y+=st)for(let xx=0;xx<W;xx+=st)if(d[(y*W+xx)*4+3]>110)pts.push([xx-W/2,y-H/2]);
+    o.pts=pts;o.txt=e.textContent;o.w=r.width;o.h=r.height;
+  }
+  function rs(){cv.width=cv.clientWidth*DPR;cv.height=cv.clientHeight*DPR;T.forEach(o=>o.txt='')}
+  rs();addEventListener('resize',rs);document.fonts&&document.fonts.ready.then(()=>T.forEach(o=>o.txt=''));
+  const P=[];let mx=-999,my=-999,vx=0,vy=0,lx=null,ly=null;
+  addEventListener('pointermove',e=>{if(lx!==null){vx=e.clientX-lx;vy=e.clientY-ly}lx=mx=e.clientX;ly=my=e.clientY},{passive:true});
+  document.addEventListener('pointerleave',()=>{mx=my=-999;lx=null});
+  function loop(){
+    requestAnimationFrame(loop);
+    const on=window.FXMODE===3,cr=cv.getBoundingClientRect();
+    for(const o of T){
+      if(o.e.textContent!==o.txt)sample(o);
+      const r=o.e.getBoundingClientRect();
+      const inside=on&&mx>r.left-30&&mx<r.right+30&&my>r.top-30&&my<r.bottom+30;
+      const R=Math.max(34,Math.min(90,r.height*.9));
+      o.tr=inside?R:0;o.r+=(o.tr-o.r)*(inside?.25:.035);
+      if(inside){o.x=mx-r.left;o.y=my-r.top}
+      o.e.style.setProperty('--r',o.r.toFixed(1)+'px');o.e.style.setProperty('--x',o.x+'px');o.e.style.setProperty('--y',o.y+'px');
+      if(inside&&o.pts.length){
+        const cx=r.left+r.width/2,cy=r.top+r.height/2,sp=Math.min(1,Math.hypot(vx,vy)/14)+.25;
+        let n=Math.round(50*sp);
+        for(let k=0;k<n*3&&n>0;k++){const p=o.pts[(Math.random()*o.pts.length)|0],px=cx+p[0],py=cy+p[1],dx=px-mx,dy=py-my,dd=Math.hypot(dx,dy);
+          if(dd>R*.75)continue;n--;
+          const f=(1-dd/R),a=Math.atan2(dy,dx)+(Math.random()-.5)*.9,s=(1.2+Math.random()*3.2)*(.5+f);
+          P.push({x:px,y:py,vx:Math.cos(a)*s+vx*.12,vy:Math.sin(a)*s+vy*.12-.4,l:1,d:.012+Math.random()*.02,z:.6+Math.random()*1.5})}
+      }
+    }
+    vx*=.8;vy*=.8;
+    x.setTransform(DPR,0,0,DPR,-cr.left*DPR,-cr.top*DPR);x.clearRect(cr.left,cr.top,cr.width,cr.height);
+    x.fillStyle='#f4f1ea';
+    for(let i=P.length-1;i>=0;i--){const p=P[i];
+      p.vx*=.965;p.vy=p.vy*.965-.035;p.vx+=Math.sin((p.y+p.l*60)*.05)*.06;p.x+=p.vx;p.y+=p.vy;p.l-=p.d;
+      if(p.l<=0){P.splice(i,1);continue}
+      x.globalAlpha=p.l*p.l;x.fillRect(p.x,p.y,p.z,p.z)}
+    if(P.length>4000)P.splice(0,P.length-4000);
   }
   requestAnimationFrame(loop);
 })();
