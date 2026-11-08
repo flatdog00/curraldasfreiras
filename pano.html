@@ -135,17 +135,6 @@ footer{padding:24px 16px 34px;text-align:center;font-size:.58rem;letter-spacing:
   </div>
 </section>
 
-<section class="gal">
-  <h2>Um vale escondido no coração da Madeira</h2>
-  <small>Descobre</small>
-  <div class="mosaic" id="mosaic"></div>
-</section>
-
-<footer>© curraldasfreiras.com · Madeira · Portugal</footer>
-
-<div class="lb" id="lb"><button class="x" aria-label="Fechar">✕</button><button class="prev" aria-label="Anterior">‹</button>
-  <img alt=""><button class="next" aria-label="Seguinte">›</button><p></p></div>
-
 <script>
 /* ===== VIAGEM: pontos da panorâmica (0–1) =====
    x,y = centro do enquadramento; z = zoom (1 = imagem na altura do ecrã) */
@@ -193,25 +182,6 @@ function frame(){
 }
 requestAnimationFrame(frame);
 
-/* ===== MOSAICO ===== */
-const FOTOS=[["01","O vale"],["02","Eira do Serrado"],["03","A aldeia"],["04","Nevoeiro"],["05","Castanheiros"],
-  ["06","Entre montanhas"],["07","Ao entardecer"],["08","As gentes"]];
-const mos=document.getElementById('mosaic');
-FOTOS.forEach(([n,c],i)=>{const f=document.createElement('figure');f.className='tile';f.dataset.i=i;
-  f.innerHTML=`<div class="ph">${n}</div><img src="assets/${n}.jpg" alt="${c}" loading="lazy" onerror="this.remove()"><figcaption>${c}</figcaption>`;
-  mos.appendChild(f)});
-const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.style.transitionDelay=(e.target.dataset.i%3)*90+'ms';
-  e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.15});
-document.querySelectorAll('.tile').forEach(t=>io.observe(t));
-const lb=document.getElementById('lb'),li=lb.querySelector('img'),lc=lb.querySelector('p');let cur=0;
-const show=i=>{cur=(i+FOTOS.length)%FOTOS.length;li.src=`assets/${FOTOS[cur][0]}.jpg`;lc.textContent=FOTOS[cur][1];lb.classList.add('open')};
-mos.onclick=e=>{const t=e.target.closest('.tile');if(t)show(+t.dataset.i)};
-lb.querySelector('.x').onclick=()=>lb.classList.remove('open');
-lb.querySelector('.prev').onclick=e=>{e.stopPropagation();show(cur-1)};
-lb.querySelector('.next').onclick=e=>{e.stopPropagation();show(cur+1)};
-lb.onclick=e=>{if(e.target===lb)lb.classList.remove('open')};
-addEventListener('keydown',e=>{if(!lb.classList.contains('open'))return;if(e.key==='Escape')lb.classList.remove('open');
-  if(e.key==='ArrowLeft')show(cur-1);if(e.key==='ArrowRight')show(cur+1)});
 
 /* ===== CONTAGEM REGRESSIVA: 5 fev 2028, 00:00 (hora da Madeira = UTC+0 em fevereiro) ===== */
 (function(){
