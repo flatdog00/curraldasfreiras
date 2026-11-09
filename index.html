@@ -106,6 +106,15 @@ footer{padding:24px 16px 34px;text-align:center;font-size:.58rem;letter-spacing:
 .sep{font-weight:200;font-size:clamp(1.6rem,3.2vw,2.8rem);line-height:1.15;opacity:.3}
 .count .date{margin-top:16px;font-size:.62rem;letter-spacing:.42em;color:var(--muted)}
 .count.done .units{display:none}
+.stock{margin-top:22px;display:flex;flex-direction:column;align-items:center;gap:10px;pointer-events:auto}
+.stock[hidden]{display:none}
+.stock-lead{font-size:.56rem;letter-spacing:.42em;text-transform:uppercase;color:var(--muted)}
+.stock-row{display:flex;flex-wrap:wrap;justify-content:center;gap:clamp(16px,2.6vw,36px)}
+.si{display:flex;flex-direction:column;align-items:center;gap:5px;color:var(--ink);text-decoration:none;opacity:.88;transition:opacity .3s}
+a.si:hover{opacity:1}
+.si .sn{font-size:.62rem;letter-spacing:.22em;color:var(--muted)}
+.si .sc{font-size:.95rem;letter-spacing:.06em;font-variant-numeric:tabular-nums}
+.si.out .sc{color:var(--muted)}
 .count .brand{margin-top:26px;width:clamp(150px,13vw,200px);height:auto;opacity:.75}
 .social{margin-top:18px;display:flex;gap:18px;justify-content:center;pointer-events:auto}
 .social a{display:block;opacity:.55;transition:opacity .3s}
@@ -155,6 +164,10 @@ body.pmode .ptx{color:transparent!important;text-shadow:none!important}
         <div class="u"><b id="cd-s">00</b><small data-i="s">segundos</small></div>
       </div>
       <div class="date">05 · 02 · 2028</div>
+      <div class="stock" id="stock" hidden>
+        <div class="stock-lead" data-i="stock">Edição Fundador</div>
+        <div class="stock-row" id="stock-row"></div>
+      </div>
       <img class="brand" src="assets/logo-horizontal-branco.svg" alt="curraldasfreiras.com">
       <nav class="social">
         <a href="https://www.instagram.com/curraldasfreiras.comm" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg></a>
@@ -386,12 +399,12 @@ window.FXMODE=3;
 
 /* ===== IDIOMAS ===== */
 const I18N={
- pt:{tag:'uma porta para o mundo',lead:'Lançamento',d:'dias',h:'horas',m:'minutos',s:'segundos',done:'Já chegámos',soon:'Em breve'},
- en:{tag:'a door to the world',lead:'Launch',d:'days',h:'hours',m:'minutes',s:'seconds',done:'We are here',soon:'Coming soon'},
- it:{tag:'una porta sul mondo',lead:'Lancio',d:'giorni',h:'ore',m:'minuti',s:'secondi',done:'Ci siamo',soon:'Prossimamente'},
- de:{tag:'ein Tor zur Welt',lead:'Start',d:'Tage',h:'Stunden',m:'Minuten',s:'Sekunden',done:'Wir sind da',soon:'Demnächst'},
- zh:{tag:'通往世界的一扇门',lead:'即将上线',d:'天',h:'小时',m:'分钟',s:'秒',done:'我们来了',soon:'敬请期待'},
- ar:{tag:'بوابة إلى العالم',lead:'الإطلاق',d:'أيام',h:'ساعات',m:'دقائق',s:'ثوانٍ',done:'لقد وصلنا',soon:'قريبًا'}
+ pt:{tag:'uma porta para o mundo',lead:'Lançamento',d:'dias',h:'horas',m:'minutos',s:'segundos',done:'Já chegámos',soon:'Em breve',stock:'Edição Fundador',of:'de',out:'esgotado',closed:'edição encerrada'},
+ en:{tag:'a door to the world',lead:'Launch',d:'days',h:'hours',m:'minutes',s:'seconds',done:'We are here',soon:'Coming soon',stock:'Founder Edition',of:'of',out:'sold out',closed:'edition closed'},
+ it:{tag:'una porta sul mondo',lead:'Lancio',d:'giorni',h:'ore',m:'minuti',s:'secondi',done:'Ci siamo',soon:'Prossimamente',stock:'Edizione Fondatore',of:'di',out:'esaurito',closed:'edizione chiusa'},
+ de:{tag:'ein Tor zur Welt',lead:'Start',d:'Tage',h:'Stunden',m:'Minuten',s:'Sekunden',done:'Wir sind da',soon:'Demnächst',stock:'Gründer-Edition',of:'von',out:'ausverkauft',closed:'Edition geschlossen'},
+ zh:{tag:'通往世界的一扇门',lead:'即将上线',d:'天',h:'小时',m:'分钟',s:'秒',done:'我们来了',soon:'敬请期待',stock:'创始版',of:'/',out:'已售罄',closed:'已截止'},
+ ar:{tag:'بوابة إلى العالم',lead:'الإطلاق',d:'أيام',h:'ساعات',m:'دقائق',s:'ثوانٍ',done:'لقد وصلنا',soon:'قريبًا',stock:'إصدار المؤسسين',of:'من',out:'نفدت',closed:'انتهى الإصدار'}
 };
 const FONTS={zh:'Noto+Sans+SC:wght@300;400',ar:'Noto+Sans+Arabic:wght@300;400'};
 let LANG='pt';
@@ -403,6 +416,7 @@ function setLang(l,push){
   document.querySelectorAll('#lang a').forEach(a=>a.classList.toggle('on',a.lang===l));
   if(FONTS[l]&&!document.getElementById('f-'+l)){const k=document.createElement('link');k.id='f-'+l;k.rel='stylesheet';k.href='https://fonts.googleapis.com/css2?family='+FONTS[l]+'&display=swap';document.head.appendChild(k)}
   try{localStorage.setItem('lang',l)}catch(e){}
+  if(window.renderStock)renderStock();
   if(push)history.replaceState(null,'',l==='pt'?location.pathname:'?lang='+l);
 }
 document.querySelectorAll('#lang a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();setLang(a.lang,true)}));
@@ -428,6 +442,29 @@ document.querySelectorAll('#lang a').forEach(a=>a.addEventListener('click',e=>{e
     setTimeout(tick,1000-Date.now()%1000);
   }
   tick();
+})();
+
+/* ===== CONTADOR DA EDIÇÃO FUNDADOR: lê data/stock.json (atualizado pelo GitHub Actions a partir do Patreon) ===== */
+(function(){
+  const box=document.getElementById('stock'),row=document.getElementById('stock-row');
+  let S=null;
+  window.renderStock=function(){
+    if(!S||!S.tiers||!S.tiers.length)return;
+    const L=I18N[LANG],closed=S.close&&Date.now()>=Date.parse(S.close);
+    row.textContent='';
+    S.tiers.forEach(t=>{
+      const full=t.limit&&t.count>=t.limit;
+      const el=document.createElement(S.url&&!closed&&!full?'a':'div');
+      el.className='si'+(full||closed?' out':'');
+      if(el.tagName==='A'){el.href=S.url;el.target='_blank';el.rel='noopener'}
+      const n=document.createElement('span');n.className='sn';n.textContent=t.name;
+      const c=document.createElement('span');c.className='sc';
+      c.textContent=closed?L.closed:full?L.out:(t.limit?t.count+' '+L.of+' '+t.limit:String(t.count));
+      el.append(n,c);row.appendChild(el);
+    });
+    box.hidden=false;
+  };
+  fetch('data/stock.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{S=j;renderStock()}).catch(()=>{});
 })();
 </script>
 </body>

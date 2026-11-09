@@ -1,0 +1,36 @@
+name: Contador Patreon
+
+on:
+  schedule:
+    - cron: "17 * * * *"   # de hora a hora
+  workflow_dispatch:        # botão "Run workflow" para atualizar já
+
+permissions:
+  contents: write
+
+concurrency:
+  group: patreon-stock
+  cancel-in-progress: false
+
+jobs:
+  stock:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Ler membros do Patreon
+        env:
+          PATREON_TOKEN: ${{ secrets.PATREON_TOKEN }}
+        run: python3 scripts/patreon_stock.py
+
+      - name: Guardar alterações
+        run: |
+          if git diff --quiet -- data/stock.json; then
+            echo "Sem alterações."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/stock.json
+          git commit -m "Contador: atualizar membros do Patreon"
+          git push
