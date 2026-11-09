@@ -38,8 +38,8 @@ Caderno de ideias para o projeto. Para acrescentar, basta dizer ao Claude: *"gua
 - [ ] Definir quantas t-shirts e a resposta do enigma
 
 ## Outras redes / plataformas
-- [x] Patreon — página criada (patreon.com/c/curraldasfreiras), por publicar
-- [ ] Patreon — escalões Apoiante / Fundador / Fundador Season e juntar ícone ao site
+- [x] Patreon — publicado (patreon.com/cw/curraldasfreiras)
+- [x] Patreon — escalões curraleiro de vista (grátis) / curraleiro 30 / curraleiro fundador 30 / curraleiro de gema 10, ícone e contador no site
 - [x] YouTube — @curraldasfreiras reservado
 - [x] LinkedIn — página criada (linkedin.com/company/curraldasfreiras)
 - [ ] Pinterest — criar
