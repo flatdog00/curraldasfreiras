@@ -2,6 +2,10 @@
 
 Caderno de ideias para o projeto. Para acrescentar, basta dizer ao Claude: *"guarda esta ideia: …"*
 
+## Visão
+- [ ] Objetivo final: festival de música eletrónica no Curral — a marca curraldasfreiras.com é a base; a parte artística passa para a Flat (promotora)
+- [ ] Ver se o registo da marca fica em nome da Flat (anonimato + já dentro da promotora)
+
 ## Projeto
 - [ ] Site completo em curraldasfreiras.com
 - [ ] App para iOS e Android
