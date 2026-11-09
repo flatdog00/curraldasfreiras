@@ -17,6 +17,10 @@ Caderno de ideias para o projeto. Para acrescentar, basta dizer ao Claude: *"gua
 - [ ] Agentes no GitHub — pedir alterações com `@claude` em issues
 - [ ] GitHub Actions — tarefas automáticas (ex.: otimizar imagens/vídeos ao carregar, publicar sozinho)
 
+## Lembretes
+- [ ] Criar um email da marca para mim (ex.: geral@curraldasfreiras.com)
+- [ ] Usar o apoio do Patreon para ajudar a pagar o Higgsfield e montar um set de produção em casa
+
 ## Domínio
 - [ ] Privacidade WHOIS — rever quando a oferta da Network Solutions acabar
 - [ ] Renovar o domínio antes de 5 nov 2027
