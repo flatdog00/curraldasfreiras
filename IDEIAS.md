@@ -18,6 +18,7 @@ Caderno de ideias para o projeto. Para acrescentar, basta dizer ao Claude: *"gua
 - [ ] GitHub Actions — tarefas automáticas (ex.: otimizar imagens/vídeos ao carregar, publicar sozinho)
 
 ## Lembretes
+- [ ] Backup da marca para a Drive (Curral das Freiras › Marca): logos, guia de marca, kit das redes e panorâmica — para gerir tudo pelo telemóvel sem depender do PC
 - [ ] Criar um email da marca para mim (ex.: geral@curraldasfreiras.com)
 - [ ] Usar o apoio do Patreon para ajudar a pagar o Higgsfield e montar um set de produção em casa
 
