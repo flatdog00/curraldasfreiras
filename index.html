@@ -109,6 +109,7 @@ footer{padding:24px 16px 34px;text-align:center;font-size:.58rem;letter-spacing:
 .stock{position:absolute;left:32px;bottom:72px;display:flex;flex-direction:column;align-items:flex-start;gap:14px;
   pointer-events:auto;z-index:4;animation:rise 2s 1.3s cubic-bezier(.2,.7,.2,1) both}
 .stock[hidden]{display:none}
+.stock-lead.lk{cursor:pointer;transition:color .3s}.stock-lead.lk:hover{color:var(--ink)}
 .stock-lead{font-size:.56rem;letter-spacing:.42em;text-transform:uppercase;color:var(--muted)}
 .stock-row{display:flex;flex-direction:column;gap:9px}
 .si{display:flex;align-items:baseline;gap:18px;color:var(--ink);text-decoration:none;opacity:.88;transition:opacity .3s}
@@ -476,9 +477,12 @@ document.querySelectorAll('#lang a').forEach(a=>a.addEventListener('click',e=>{e
     const c=document.createElement('span');c.className='sc';
     c.textContent=over?L.out:count+' '+L.of+' '+limit;
     el.append(c);row.appendChild(el);
-    const link=over?(S.sub_url||S.url):S.url;
-    if(link){const j=document.createElement('a');j.className='cta';j.href=link;j.target='_blank';j.rel='noopener';
-      j.innerHTML='<span></span><i>→</i>';j.firstChild.textContent=over?L.sub:L.join;row.appendChild(j)}
+    if(S.url&&!over){const j=document.createElement('a');j.className='cta';j.href=S.url;j.target='_blank';j.rel='noopener';
+      j.innerHTML='<span></span><i>→</i>';j.firstChild.textContent=L.join;row.appendChild(j)}
+    // depois de esgotar: o próprio "Edição Fundador" leva ao Patreon
+    const lead=box.querySelector('.stock-lead'),url=S.sub_url||S.url;
+    if(over&&url){lead.onclick=()=>window.open(url,'_blank','noopener');lead.classList.add('lk');lead.setAttribute('role','link');lead.tabIndex=0}
+    else{lead.onclick=null;lead.classList.remove('lk');lead.removeAttribute('role');lead.removeAttribute('tabindex')}
     box.hidden=false;
   };
   fetch('data/stock.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{S=j;renderStock()}).catch(()=>{});
