@@ -6,6 +6,10 @@ Caderno de ideias para o projeto. Para acrescentar, basta dizer ao Claude: *"gua
 - [ ] Site completo em curraldasfreiras.com
 - [ ] App para iOS e Android
 - [ ] Shop (loja online)
+- [ ] Tours na freguesia (reservas pelo site)
+- [ ] App de atrações turísticas, lazer e estadias do Curral
+- [ ] Estadias (alojamento / reservas)
+- [ ] Registo da marca no INPI — 6 classes (25, 35, 41, 39, 43, 9) ≈ 330 € online; atenção: titular fica público
 - [ ] Sala de chat no site, estilo salas de bate-papo antigas (aeiou / SAPO / mIRC): nickname, sala "Curral", mensagens em tempo real; precisa de serviço externo (ex.: Firebase/Supabase) e moderação
 - [ ] Banco de imagens online do Curral — fotos e vídeos do vale, das gentes e das tradições, à venda com licença de uso (direitos de autor)
 
