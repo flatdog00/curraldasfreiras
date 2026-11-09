@@ -116,11 +116,17 @@ a.si:hover{opacity:1}
 .si .sn{min-width:11.5em;font-size:.66rem;letter-spacing:.2em;color:var(--muted)}
 .si .sc{font-size:.95rem;letter-spacing:.1em;font-variant-numeric:tabular-nums}
 .si.out .sc{color:var(--muted)}
+.cta{display:inline-flex;align-items:center;gap:10px;margin-top:2px;font-size:.6rem;letter-spacing:.32em;text-transform:uppercase;color:var(--ink);
+  text-decoration:none;padding-bottom:6px;background:linear-gradient(currentColor,currentColor) left bottom/28% 1px no-repeat;opacity:.9;transition:background-size .5s ease,opacity .3s}
+.cta i{font-style:normal;display:inline-block;transition:transform .4s ease}
+.cta:hover{background-size:100% 1px;opacity:1}.cta:hover i{transform:translateX(5px)}
+html[lang=zh] .cta,html[lang=ar] .cta{letter-spacing:.1em;font-size:.72rem}
 @media (max-width:980px){
   .stock{left:16px;right:16px;bottom:64px;align-items:center;gap:8px}
   .stock-row{flex-direction:row;flex-wrap:wrap;justify-content:center;gap:16px}
   .si{flex-direction:column;align-items:center;gap:3px}
   .si .sn{min-width:0;font-size:.56rem}
+  .cta{flex-basis:100%;justify-content:center;background-position:center bottom}
   .count{bottom:clamp(128px,17vh,160px)}}
 .count .brand{margin-top:26px;width:clamp(150px,13vw,200px);height:auto;opacity:.75}
 .social{margin-top:18px;display:flex;gap:18px;justify-content:center;pointer-events:auto}
@@ -409,12 +415,12 @@ window.FXMODE=3;
 
 /* ===== IDIOMAS ===== */
 const I18N={
- pt:{tag:'uma porta para o mundo',lead:'Lançamento',d:'dias',h:'horas',m:'minutos',s:'segundos',done:'Já chegámos',soon:'Em breve',stock:'Edição Fundador',of:'de',out:'esgotado',closed:'edição encerrada'},
- en:{tag:'a door to the world',lead:'Launch',d:'days',h:'hours',m:'minutes',s:'seconds',done:'We are here',soon:'Coming soon',stock:'Founder Edition',of:'of',out:'sold out',closed:'edition closed'},
- it:{tag:'una porta sul mondo',lead:'Lancio',d:'giorni',h:'ore',m:'minuti',s:'secondi',done:'Ci siamo',soon:'Prossimamente',stock:'Edizione Fondatore',of:'di',out:'esaurito',closed:'edizione chiusa'},
- de:{tag:'ein Tor zur Welt',lead:'Start',d:'Tage',h:'Stunden',m:'Minuten',s:'Sekunden',done:'Wir sind da',soon:'Demnächst',stock:'Gründer-Edition',of:'von',out:'ausverkauft',closed:'Edition geschlossen'},
- zh:{tag:'通往世界的一扇门',lead:'即将上线',d:'天',h:'小时',m:'分钟',s:'秒',done:'我们来了',soon:'敬请期待',stock:'创始版',of:'/',out:'已售罄',closed:'已截止'},
- ar:{tag:'بوابة إلى العالم',lead:'الإطلاق',d:'أيام',h:'ساعات',m:'دقائق',s:'ثوانٍ',done:'لقد وصلنا',soon:'قريبًا',stock:'إصدار المؤسسين',of:'من',out:'نفدت',closed:'انتهى الإصدار'}
+ pt:{tag:'uma porta para o mundo',lead:'Lançamento',d:'dias',h:'horas',m:'minutos',s:'segundos',done:'Já chegámos',soon:'Em breve',stock:'Edição Fundador',join:'Torna-te fundador',of:'de',out:'esgotado',closed:'edição encerrada'},
+ en:{tag:'a door to the world',lead:'Launch',d:'days',h:'hours',m:'minutes',s:'seconds',done:'We are here',soon:'Coming soon',stock:'Founder Edition',join:'Become a founder',of:'of',out:'sold out',closed:'edition closed'},
+ it:{tag:'una porta sul mondo',lead:'Lancio',d:'giorni',h:'ore',m:'minuti',s:'secondi',done:'Ci siamo',soon:'Prossimamente',stock:'Edizione Fondatore',join:'Diventa fondatore',of:'di',out:'esaurito',closed:'edizione chiusa'},
+ de:{tag:'ein Tor zur Welt',lead:'Start',d:'Tage',h:'Stunden',m:'Minuten',s:'Sekunden',done:'Wir sind da',soon:'Demnächst',stock:'Gründer-Edition',join:'Werde Gründer',of:'von',out:'ausverkauft',closed:'Edition geschlossen'},
+ zh:{tag:'通往世界的一扇门',lead:'即将上线',d:'天',h:'小时',m:'分钟',s:'秒',done:'我们来了',soon:'敬请期待',stock:'创始版',join:'成为创始成员',of:'/',out:'已售罄',closed:'已截止'},
+ ar:{tag:'بوابة إلى العالم',lead:'الإطلاق',d:'أيام',h:'ساعات',m:'دقائق',s:'ثوانٍ',done:'لقد وصلنا',soon:'قريبًا',stock:'إصدار المؤسسين',join:'كن مؤسسًا',of:'من',out:'نفدت',closed:'انتهى الإصدار'}
 };
 const FONTS={zh:'Noto+Sans+SC:wght@300;400',ar:'Noto+Sans+Arabic:wght@300;400'};
 let LANG='pt';
@@ -470,6 +476,8 @@ document.querySelectorAll('#lang a').forEach(a=>a.addEventListener('click',e=>{e
     const c=document.createElement('span');c.className='sc';
     c.textContent=closed?L.closed:full?L.out:count+' '+L.of+' '+limit;
     el.append(c);row.appendChild(el);
+    if(S.url&&!closed&&!full){const j=document.createElement('a');j.className='cta';j.href=S.url;j.target='_blank';j.rel='noopener';
+      j.innerHTML='<span></span><i>→</i>';j.firstChild.textContent=L.join;row.appendChild(j)}
     box.hidden=false;
   };
   fetch('data/stock.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{S=j;renderStock()}).catch(()=>{});
