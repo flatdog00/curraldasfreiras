@@ -106,15 +106,22 @@ footer{padding:24px 16px 34px;text-align:center;font-size:.58rem;letter-spacing:
 .sep{font-weight:200;font-size:clamp(1.6rem,3.2vw,2.8rem);line-height:1.15;opacity:.3}
 .count .date{margin-top:16px;font-size:.62rem;letter-spacing:.42em;color:var(--muted)}
 .count.done .units{display:none}
-.stock{margin-bottom:34px;display:flex;flex-direction:column;align-items:center;gap:10px;pointer-events:auto}
+.stock{position:absolute;left:32px;bottom:72px;display:flex;flex-direction:column;align-items:flex-start;gap:14px;
+  pointer-events:auto;z-index:4;animation:rise 2s 1.3s cubic-bezier(.2,.7,.2,1) both}
 .stock[hidden]{display:none}
 .stock-lead{font-size:.56rem;letter-spacing:.42em;text-transform:uppercase;color:var(--muted)}
-.stock-row{display:flex;flex-wrap:wrap;justify-content:center;gap:clamp(16px,2.6vw,36px)}
-.si{display:flex;flex-direction:column;align-items:center;gap:5px;color:var(--ink);text-decoration:none;opacity:.88;transition:opacity .3s}
+.stock-row{display:flex;flex-direction:column;gap:9px}
+.si{display:flex;align-items:baseline;gap:18px;color:var(--ink);text-decoration:none;opacity:.88;transition:opacity .3s}
 a.si:hover{opacity:1}
-.si .sn{font-size:.62rem;letter-spacing:.22em;color:var(--muted)}
-.si .sc{font-size:.95rem;letter-spacing:.06em;font-variant-numeric:tabular-nums}
+.si .sn{min-width:11.5em;font-size:.66rem;letter-spacing:.2em;color:var(--muted)}
+.si .sc{font-size:.78rem;letter-spacing:.08em;font-variant-numeric:tabular-nums}
 .si.out .sc{color:var(--muted)}
+@media (max-width:980px){
+  .stock{left:16px;right:16px;bottom:64px;align-items:center;gap:8px}
+  .stock-row{flex-direction:row;flex-wrap:wrap;justify-content:center;gap:16px}
+  .si{flex-direction:column;align-items:center;gap:3px}
+  .si .sn{min-width:0;font-size:.56rem}
+  .count{bottom:clamp(128px,17vh,160px)}}
 .count .brand{margin-top:26px;width:clamp(150px,13vw,200px);height:auto;opacity:.75}
 .social{margin-top:18px;display:flex;gap:18px;justify-content:center;pointer-events:auto}
 .social a{display:block;opacity:.55;transition:opacity .3s}
@@ -156,10 +163,6 @@ body.pmode .ptx{color:transparent!important;text-shadow:none!important}
     </div>
     <div class="cap" id="cap"><small>No fundo do vale</small>a aldeia</div>
     <div class="count" id="count">
-      <div class="stock" id="stock" hidden>
-        <div class="stock-lead" data-i="stock">Edição Fundador</div>
-        <div class="stock-row" id="stock-row"></div>
-      </div>
       <div class="lead" id="lead">Lançamento</div>
       <div class="units">
         <div class="u"><b id="cd-d">000</b><small data-i="d">dias</small></div><span class="sep">:</span>
@@ -181,6 +184,10 @@ body.pmode .ptx{color:transparent!important;text-shadow:none!important}
     </div>
     
     
+    <div class="stock" id="stock" hidden>
+      <div class="stock-lead" data-i="stock">Edição Fundador</div>
+      <div class="stock-row" id="stock-row"></div>
+    </div>
     <canvas id="pt"></canvas>
     <div class="meta"><span data-i="soon">Em breve</span><span>32°43′N · 16°58′W</span></div>
   </div>
