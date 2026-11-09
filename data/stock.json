@@ -4,8 +4,26 @@
   "close": "2028-02-05T00:00:00Z",
   "url": "",
   "tiers": [
-    { "id": "curraleiro", "name": "curraleiro", "match": "curraleiro", "count": 0, "limit": 50 },
-    { "id": "fundador", "name": "curraleiro fundador", "match": "curraleiro fundador", "count": 0, "limit": 50 },
-    { "id": "gema", "name": "curraleiro de gema", "match": "curraleiro de gema", "count": 0, "limit": 50 }
+    {
+      "id": "curraleiro",
+      "name": "curraleiro",
+      "match": "curraleiro",
+      "count": 0,
+      "limit": 20
+    },
+    {
+      "id": "fundador",
+      "name": "curraleiro fundador",
+      "match": "curraleiro fundador",
+      "count": 0,
+      "limit": 20
+    },
+    {
+      "id": "gema",
+      "name": "curraleiro de gema",
+      "match": "curraleiro de gema",
+      "count": 0,
+      "limit": 10
+    }
   ]
 }
