@@ -114,7 +114,7 @@ footer{padding:24px 16px 34px;text-align:center;font-size:.58rem;letter-spacing:
 .si{display:flex;align-items:baseline;gap:18px;color:var(--ink);text-decoration:none;opacity:.88;transition:opacity .3s}
 a.si:hover{opacity:1}
 .si .sn{min-width:11.5em;font-size:.66rem;letter-spacing:.2em;color:var(--muted)}
-.si .sc{font-size:.78rem;letter-spacing:.08em;font-variant-numeric:tabular-nums}
+.si .sc{font-size:.95rem;letter-spacing:.1em;font-variant-numeric:tabular-nums}
 .si.out .sc{color:var(--muted)}
 @media (max-width:980px){
   .stock{left:16px;right:16px;bottom:64px;align-items:center;gap:8px}
@@ -189,7 +189,7 @@ body.pmode .ptx{color:transparent!important;text-shadow:none!important}
       <div class="stock-row" id="stock-row"></div>
     </div>
     <canvas id="pt"></canvas>
-    <div class="meta"><span data-i="soon">Em breve</span><span>32°43′N · 16°58′W</span></div>
+    <div class="meta"><span style="margin-left:auto">32°43′N · 16°58′W</span></div>
   </div>
 </section>
 
@@ -460,16 +460,14 @@ document.querySelectorAll('#lang a').forEach(a=>a.addEventListener('click',e=>{e
     if(!S||!S.tiers||!S.tiers.length)return;
     const L=I18N[LANG],closed=S.close&&Date.now()>=Date.parse(S.close);
     row.textContent='';
-    S.tiers.forEach(t=>{
-      const full=t.limit&&t.count>=t.limit;
-      const el=document.createElement(S.url&&!closed&&!full?'a':'div');
-      el.className='si'+(full||closed?' out':'');
-      if(el.tagName==='A'){el.href=S.url;el.target='_blank';el.rel='noopener'}
-      const n=document.createElement('span');n.className='sn';n.textContent=t.name;
-      const c=document.createElement('span');c.className='sc';
-      c.textContent=closed?L.closed:full?L.out:(t.limit?t.count+' '+L.of+' '+t.limit:String(t.count));
-      el.append(n,c);row.appendChild(el);
-    });
+    const count=S.tiers.reduce((a,t)=>a+(t.count||0),0),limit=S.total_limit||S.tiers.reduce((a,t)=>a+(t.limit||0),0);
+    const full=limit&&count>=limit;
+    const el=document.createElement(S.url&&!closed&&!full?'a':'div');
+    el.className='si'+(full||closed?' out':'');
+    if(el.tagName==='A'){el.href=S.url;el.target='_blank';el.rel='noopener'}
+    const c=document.createElement('span');c.className='sc';
+    c.textContent=closed?L.closed:full?L.out:count+' '+L.of+' '+limit;
+    el.append(c);row.appendChild(el);
     box.hidden=false;
   };
   fetch('data/stock.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{S=j;renderStock()}).catch(()=>{});
