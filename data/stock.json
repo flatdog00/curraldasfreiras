@@ -5,18 +5,11 @@
   "url": "https://www.patreon.com/cw/curraldasfreiras",
   "tiers": [
     {
-      "id": "curraleiro",
-      "name": "curraleiro",
-      "match": "curraleiro",
-      "count": 0,
-      "limit": 30
-    },
-    {
       "id": "fundador",
       "name": "curraleiro fundador",
       "match": "curraleiro fundador",
       "count": 0,
-      "limit": 30
+      "limit": 40
     },
     {
       "id": "gema",
