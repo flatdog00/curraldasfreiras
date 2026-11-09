@@ -9,14 +9,14 @@
       "name": "curraleiro",
       "match": "curraleiro",
       "count": 0,
-      "limit": 20
+      "limit": 30
     },
     {
       "id": "fundador",
       "name": "curraleiro fundador",
       "match": "curraleiro fundador",
       "count": 0,
-      "limit": 20
+      "limit": 30
     },
     {
       "id": "gema",
