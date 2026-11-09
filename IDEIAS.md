@@ -6,6 +6,7 @@ Caderno de ideias para o projeto. Para acrescentar, basta dizer ao Claude: *"gua
 - [ ] Site completo em curraldasfreiras.com
 - [ ] App para iOS e Android
 - [ ] Shop (loja online)
+- [ ] Banco de imagens online do Curral — fotos e vídeos do vale, das gentes e das tradições, à venda com licença de uso (direitos de autor)
 
 ## Landing (agora)
 - [ ] Vídeo em loop do Curral (`curral.mp4`) + foto de capa (`curral.jpg`)
@@ -32,9 +33,12 @@ Caderno de ideias para o projeto. Para acrescentar, basta dizer ao Claude: *"gua
 - [ ] Definir quantas t-shirts e a resposta do enigma
 
 ## Outras redes / plataformas
-- [ ] Patreon — criar e juntar ícone ao site
-- [ ] YouTube — reservar o nome já, publicar mais tarde
-- [ ] LinkedIn — criar página
+- [x] Patreon — página criada (patreon.com/c/curraldasfreiras), por publicar
+- [ ] Patreon — escalões Apoiante / Fundador / Fundador Season e juntar ícone ao site
+- [x] YouTube — @curraldasfreiras reservado
+- [x] LinkedIn — página criada (linkedin.com/company/curraldasfreiras)
+- [ ] Pinterest — criar
+- [ ] T-shirts por season (Winter e Summer); Season 01 = Edição Fundador, nunca reimpressa
 
 ## Animação
 - [ ] BD/animação do senhor a saltar de paraquedas da Eira do Serrado — rever o estilo com uma referência
