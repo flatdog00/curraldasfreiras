@@ -1,7 +1,7 @@
 {
   "updated": "2026-11-09T14:57:33Z",
   "source": "patreon",
-  "close": "2028-02-05T00:00:00Z",
+  "close": "2027-12-05T00:00:00Z",
   "url": "https://www.patreon.com/cw/curraldasfreiras/membership",
   "tiers": [
     {
@@ -19,5 +19,6 @@
       "limit": 10
     }
   ],
-  "total_limit": 50
+  "total_limit": 50,
+  "sub_url": "https://www.patreon.com/cw/curraldasfreiras/membership"
 }
