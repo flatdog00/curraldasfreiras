@@ -11,7 +11,7 @@ Caderno de ideias para o projeto. Para acrescentar, basta dizer ao Claude: *"gua
 
 ## Landing (agora)
 - [ ] Vídeo em loop do Curral (`curral.mp4`) + foto de capa (`curral.jpg`)
-- [ ] Ativar "Enforce HTTPS" no GitHub Pages depois de propagar
+- [x] "Enforce HTTPS" ativo no GitHub Pages (9 nov 2026)
 
 ## Automação
 - [ ] Agentes no GitHub — pedir alterações com `@claude` em issues
