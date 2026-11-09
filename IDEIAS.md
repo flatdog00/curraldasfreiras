@@ -43,6 +43,7 @@ Caderno de ideias para o projeto. Para acrescentar, basta dizer ao Claude: *"gua
 - [x] YouTube — @curraldasfreiras reservado
 - [x] LinkedIn — página criada (linkedin.com/company/curraldasfreiras)
 - [ ] Pinterest — criar
+- [ ] Cartão digital individual por membro (Curraleiro / Curraleiro Fundador / Curraleiro de Gema): capa com nome e nº único, para partilhar no Facebook e trocar mais tarde por algo especial (prémio, desconto, acesso)
 - [ ] T-shirts por season (Winter e Summer); Season 01 = Edição Fundador, nunca reimpressa
 
 ## Animação
