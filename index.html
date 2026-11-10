@@ -180,6 +180,27 @@ html[lang=ar] body{font-family:"Outfit","Noto Sans Arabic",system-ui,sans-serif}
 @media (max-width:640px){.lang{top:18px;right:16px;gap:11px;font-size:.56rem}}
 body.pmode .ptx{color:transparent!important;text-shadow:none!important}
 #pt{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:4}
+/* ---------- TELEMÓVEL: mais legível ---------- */
+@media (max-width:640px){
+  .title h1{font-weight:300;font-size:2.55rem}
+  .title p{font-weight:300;font-size:.95rem;letter-spacing:.2em;opacity:1}
+  .count{text-shadow:0 1px 14px rgba(0,0,0,.55)}
+  .count .lead{font-size:.68rem;font-weight:400;letter-spacing:.3em;color:rgba(244,241,234,.85);margin-bottom:14px}
+  .u b{font-size:2.6rem;font-weight:400}
+  .u small{font-size:.6rem;font-weight:400;letter-spacing:.2em;color:rgba(244,241,234,.8)}
+  .count .date{font-size:.7rem;font-weight:400;letter-spacing:.32em;color:rgba(244,241,234,.8)}
+  .count .brand{width:200px;opacity:.95}
+  .social{gap:24px;margin-top:22px}
+  .social a{opacity:.8}
+  .social svg{width:19px;height:19px}
+  .apoio{font-size:.66rem;font-weight:400;letter-spacing:.22em;opacity:.7;margin-top:18px}
+  .apoio svg{width:9px;height:9px}
+  .si .sc{font-size:1.2rem;font-weight:400}
+  .si .sn{font-size:.62rem;color:rgba(244,241,234,.8)}
+  .cta{font-size:.68rem;font-weight:400}
+  .stock{text-shadow:0 1px 14px rgba(0,0,0,.55)}
+  .lang{font-size:.66rem}
+}
 </style>
 <!-- Metricool: estatísticas de visitas -->
 <script>function loadScript(a){var b=document.getElementsByTagName("head")[0],c=document.createElement("script");c.type="text/javascript",c.src="https://tracker.metricool.com/resources/be.js",c.onreadystatechange=a,c.onload=a,b.appendChild(c)}loadScript(function(){beTracker.t({hash:"e24beed9b35886a4c9f88c9909a5653c"})});</script>
